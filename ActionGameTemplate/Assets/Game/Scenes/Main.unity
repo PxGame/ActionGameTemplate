@@ -166,7 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f7ea3dcf34b7d94e845a5a6121d3530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
+  _mode: 0
+  _appInitializerName: AGT.AGTInitializer, Assembly-CSharp
 --- !u!1 &947127661
 GameObject:
   m_ObjectHideFlags: 0

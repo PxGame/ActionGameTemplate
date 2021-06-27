@@ -5,9 +5,12 @@
  * 创建时间: 2021/6/25 1:26:30
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using XMLib;
 
 namespace AGT
 {
@@ -17,6 +20,8 @@ namespace AGT
     public class CommonPage : AGTToolPage
     {
         public override string title => "公共";
+
+        public List<Type> appInitializerTypes = new List<Type>();
 
         public override void OnDisable()
         {
@@ -28,10 +33,17 @@ namespace AGT
 
         public override void OnGUI()
         {
+            GUILayout.BeginVertical();
+            foreach (var item in appInitializerTypes)
+            {
+                EditorGUILayout.TextField(item.GetTypeName());
+            }
+            GUILayout.EndVertical();
         }
 
         public override void OnInit()
         {
+            appInitializerTypes = AssemblyUtility.FindAllAssignable<IAppInitializer>();
         }
     }
 }

@@ -18,14 +18,19 @@ namespace AGT
     /// </summary>
     public class AGTInitializer : IAppInitializer
     {
-        public string Tag => "AGT";
+        public string tag => "AGT";
 
-        public void OnRegistGlobalServiceTypes(XMLib.Application target, List<Type> serviceTypes)
+        public void OnRegistServices(XMLib.Application target, List<Type> serviceTypes)
         {
-        }
-
-        public void OnRegistServices(XMLib.Application target)
-        {
+            serviceTypes.Add(typeof(DeviceService));
+            serviceTypes.Add(typeof(ResourceService));
+            serviceTypes.Add(typeof(ArchiveService));
+            serviceTypes.Add(typeof(InputService));
+            serviceTypes.Add(typeof(CameraService));
+            serviceTypes.Add(typeof(AudioService));
+            serviceTypes.Add(typeof(UIService));
+            serviceTypes.Add(typeof(SceneService));
+            serviceTypes.Add(typeof(GameWorld));
         }
     }
 }
