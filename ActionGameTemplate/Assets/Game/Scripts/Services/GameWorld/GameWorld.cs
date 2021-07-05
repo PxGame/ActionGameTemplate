@@ -20,8 +20,9 @@ namespace AGT
         public static float logicDeltaTime => 1f / 30f;
         public static float deltaTime => Time.deltaTime;
 
-        public ModuleManager module { get; private set; } = new ModuleManager();
-        public ObjectManager obj { get; private set; } = new ObjectManager();
+        public ModuleManager module { get; private set; }
+        public ObjectManager obj { get; private set; }
+        public ActionMachineManager am { get; private set; }
 
         public void OnMonoUpdate()
         {
@@ -35,6 +36,10 @@ namespace AGT
 
         public void OnMonoStart()
         {
+            module = new ModuleManager() { gw = this };
+            obj = new ObjectManager() { gw = this };
+            am = new ActionMachineManager() { gw = this };
+
             module.Initialize();
         }
     }

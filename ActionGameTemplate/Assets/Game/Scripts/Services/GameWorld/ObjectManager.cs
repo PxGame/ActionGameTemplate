@@ -15,7 +15,8 @@ namespace AGT
     /// <summary>
     /// ObjectManager
     /// </summary>
-    public class ObjectManager 
+    public class ObjectManager
     {
+        public GameWorld gw { get; set; }
     }
 }

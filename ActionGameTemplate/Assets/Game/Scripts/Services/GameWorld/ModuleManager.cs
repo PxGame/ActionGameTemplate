@@ -18,20 +18,32 @@ namespace AGT
     /// </summary>
     public class ModuleManager
     {
-        private List<IModule> modules = new List<IModule>() {
-            new BeginModule(),
-            new InputModule(),
-            new LogicModule(),
-            new EventModule(),
-            new PhysicModule(),
-            new ViewModule(),
-            new EndModule()};
+        public enum UpdateState
+        {
+            None,
+            LogicUpdating,
+            ViewUpdating,
+        }
 
+        public GameWorld gw { get; set; }
+        public UpdateState updateState { get; private set; }
+
+        private List<IModule> modules;
         private float logicTimer;
 
         public void Initialize()
         {
+            modules = new List<IModule>() {
+            new BeginModule(){ gw = gw},
+            new InputModule(){ gw = gw},
+            new LogicModule(){ gw = gw},
+            new EventModule(){ gw = gw},
+            new PhysicModule(){ gw = gw},
+            new ViewModule(){ gw = gw},
+            new EndModule(){ gw = gw}};
+
             logicTimer = 0f;
+            updateState = UpdateState.None;
 
             foreach (var module in modules)
             {
@@ -55,6 +67,7 @@ namespace AGT
 
         private void UpdateLogic()
         {
+            updateState = UpdateState.LogicUpdating;
             logicTimer += GameWorld.deltaTime;
             while (logicTimer > GameWorld.logicDeltaTime)
             {
@@ -65,14 +78,17 @@ namespace AGT
                     module.LogicUpdate();
                 }
             }
+            updateState = UpdateState.None;
         }
 
         private void UpdateView()
         {
+            updateState = UpdateState.ViewUpdating;
             foreach (var module in modules)
             {
                 module.ViewUpdate();
             }
+            updateState = UpdateState.None;
         }
     }
 }

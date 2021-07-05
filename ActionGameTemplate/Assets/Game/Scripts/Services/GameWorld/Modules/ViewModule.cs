@@ -17,6 +17,8 @@ namespace AGT
     /// </summary>
     public class ViewModule : IModule
     {
+        public GameWorld gw { get; set; }
+
         public void Destory()
         {
             throw new System.NotImplementedException();

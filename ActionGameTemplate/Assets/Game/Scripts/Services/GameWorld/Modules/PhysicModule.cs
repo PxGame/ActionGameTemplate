@@ -17,6 +17,8 @@ namespace AGT
     /// </summary>
     public class PhysicModule : IModule
     {
+        public GameWorld gw { get; set; }
+
         public void Destory()
         {
             throw new System.NotImplementedException();
