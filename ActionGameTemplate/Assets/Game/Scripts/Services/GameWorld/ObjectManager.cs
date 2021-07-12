@@ -19,54 +19,73 @@ namespace AGT
     public class ObjectManager
     {
         public static readonly int NoneID = 0;
-        private int _nextId = 1;
+        private int nextId = 1;
 
         private LinkedList<BaseObject> objs = new LinkedList<BaseObject>();
-        private Dictionary<int, BaseObject> id2obj = new Dictionary<int, BaseObject>();
+        private Dictionary<int, LinkedListNode<BaseObject>> id2node = new Dictionary<int, LinkedListNode<BaseObject>>();
+        private List<int> createIds = new List<int>();
+        private List<int> destoryIds = new List<int>();
 
         public T Create<T>() where T : BaseObject, new()
         {
             T obj = ObjectUtility.PopObject<T>();
-            obj.id = _nextId++;
-            id2obj[obj.id] = obj;
+            obj.id = nextId++;
+
+            id2node[obj.id] = objs.AddLast(obj);
+
+            createIds.Add(obj.id);
+
             return obj;
         }
 
         public void Destory<T>(T obj) where T : BaseObject
         {
             obj.isDestoryed = true;
+
+            destoryIds.Add(obj.id);
         }
 
         public T Get<T>(int id) where T : BaseObject
         {
-            return id2obj.TryGetValue(id, out BaseObject obj) ? obj as T : null;
+            return id2node.TryGetValue(id, out LinkedListNode<BaseObject> node) ? node.Value as T : null;
         }
 
         public void ApplyInitialize()
         {
-            foreach (var obj in objs)
+            if (createIds.Count <= 0) { return; }
+
+            foreach (var id in createIds)
             {
+                LinkedListNode<BaseObject> node = id2node[id];
+                BaseObject obj = node.Value;
                 if (!obj.isInited)
                 {
                     obj.Initialize();
                 }
             }
+            createIds.Clear();
         }
 
         public void ApplyDestory()
         {
-            foreach (var obj in objs)
+            if (destoryIds.Count <= 0) { return; }
+
+            foreach (var id in destoryIds)
             {
+                LinkedListNode<BaseObject> node = id2node[id];
+                BaseObject obj = node.Value;
                 if (obj.isDestoryed)
                 {
                     if (obj.isInited)
                     {
                         obj.Destory();
                     }
-                    objs.Remove(obj);
-                    id2obj.Remove(obj.id);
+
+                    id2node.Remove(obj.id);
+                    objs.Remove(node);
                 }
             }
+            destoryIds.Clear();
         }
     }
 

@@ -17,6 +17,8 @@ namespace AGT
     /// </summary>
     public class BeginModule : IModule
     {
+        private GameWorld gw;
+
         public void Destory()
         {
             SuperLog.Log("BeginModule Destory");
@@ -25,11 +27,14 @@ namespace AGT
         public void Initialize(GameWorld gw)
         {
             SuperLog.Log("BeginModule Initialize");
+            this.gw = gw;
         }
 
         public void LogicUpdate()
         {
             SuperLog.Log("BeginModule LogicUpdate");
+
+            gw.obj.ApplyInitialize();
         }
 
         public void ViewUpdate()
