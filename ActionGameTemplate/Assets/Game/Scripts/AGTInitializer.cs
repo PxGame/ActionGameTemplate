@@ -20,17 +20,33 @@ namespace AGT
     {
         public string tag => "AGT";
 
-        public void OnRegistServices(XMLib.Application target, List<Type> serviceTypes)
+        public void OnInitializing()
         {
-            serviceTypes.Add(typeof(DeviceService));
-            serviceTypes.Add(typeof(ResourceService));
-            serviceTypes.Add(typeof(ArchiveService));
-            serviceTypes.Add(typeof(InputService));
-            serviceTypes.Add(typeof(CameraService));
-            serviceTypes.Add(typeof(AudioService));
-            serviceTypes.Add(typeof(UIService));
-            serviceTypes.Add(typeof(SceneService));
-            serviceTypes.Add(typeof(GameWorld));
+        }
+
+        public void OnRegistServices(XMLib.Application target, List<Tuple<Type, Action<object>>> serviceTypes)
+        {
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(DeviceService), t => Game.device = t as DeviceService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(ResourceService), t => Game.resource = t as ResourceService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(ArchiveService), t => Game.archive = t as ArchiveService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(InputService), t => Game.input = t as InputService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(CameraService), t => Game.camera = t as CameraService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(AudioService), t => Game.audio = t as AudioService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(UIService), t => Game.ui = t as UIService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(SceneService), t => Game.scene = t as SceneService));
+            serviceTypes.Add(new Tuple<Type, Action<object>>(typeof(GameWorld), t => Game.gw = t as GameWorld));
+        }
+
+        public void OnInitialized()
+        {
+        }
+
+        public void OnDisposed()
+        {
+        }
+
+        public void OnDisposing()
+        {
         }
     }
 }

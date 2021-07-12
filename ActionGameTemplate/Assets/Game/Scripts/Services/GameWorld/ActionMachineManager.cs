@@ -26,8 +26,6 @@ namespace AGT
     /// </summary>
     public class ActionMachineManager
     {
-        public GameWorld gw { get; set; }
-
         public MachineConfig LoadConfig(string configName)
         {
             return null;
@@ -53,47 +51,18 @@ namespace AGT
         private void UpdateState(ActionMachineObject obj)
         {
             //清理
-            obj.actionMachine.nextStateName = null;
-            obj.actionMachine.nextStatePriority = 0;
-            obj.actionMachine.nextAnimIndex = -1;
-            obj.actionMachine.nextAnimStartTime = default;
+            obj.am.nextStateName = null;
+            obj.am.nextStatePriority = 0;
+            obj.am.nextAnimIndex = -1;
+            obj.am.nextAnimStartTime = default;
 
             //状态改变
-            obj.actionMachine.eventTypes |= (ActionMachineEvent.StateChanged | ActionMachineEvent.AnimChanged);
+            obj.am.eventTypes |= (ActionMachineEvent.StateChanged | ActionMachineEvent.AnimChanged);
         }
 
         private void UpdateInitialize(ActionMachineObject controller)
         {
-            controller.actionMachine.eventTypes = ActionMachineEvent.None;
-        }
-    }
-
-    public class ActionMachineData : IComponentData
-    {
-        public string configName;
-        public string stateName;
-
-        public int globalFrameIndex;
-        public int frameIndex;
-
-        public int waitFrameCnt;
-
-        public int stateBeginFrameIndex;
-        public int animIndex;
-        public float animStartTime;
-
-        public int nextStatePriority;
-        public string nextStateName;
-        public int nextAnimIndex;
-        public float nextAnimStartTime;
-
-        public ActionMachineEvent eventTypes;
-
-        public List<object> globalActionNodes;
-        public List<object> actionNodes;
-
-        public void Reset()
-        {
+            controller.am.eventTypes = ActionMachineEvent.None;
         }
     }
 }

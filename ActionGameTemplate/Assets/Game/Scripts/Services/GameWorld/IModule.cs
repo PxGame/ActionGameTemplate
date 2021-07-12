@@ -17,9 +17,7 @@ namespace AGT
     /// </summary>
     public interface IModule
     {
-        GameWorld gw { get; set; }
-
-        void Initialize();
+        void Initialize(GameWorld gw);
 
         void Destory();
 

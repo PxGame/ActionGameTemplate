@@ -18,94 +18,62 @@ namespace AGT
     /// </summary>
     public class BaseObject
     {
-        public static readonly int NoneID = 0;
-
         public int id;
+        public bool isInited;
+        public bool isDestoryed;
 
         private Dictionary<Type, IComponentData> _componentDict = new Dictionary<Type, IComponentData>();
 
-        public bool HasComponent<T>() where T : IComponentData, new()
+        public bool HasComponent<T>() where T : class, IComponentData, new()
         {
             return _componentDict.ContainsKey(typeof(T));
         }
 
-        public T AddComponent<T>() where T : IComponentData, new()
+        public T AddComponent<T>() where T : class, IComponentData, new()
         {
-            T data = ComponentUtility.Pop<T>();
+            T data = ObjectUtility.PopComponent<T>();
             _componentDict.Add(typeof(T), data);
             return data;
         }
 
-        public T GetComponent<T>() where T : IComponentData, new()
+        public T GetComponent<T>() where T : class, IComponentData, new()
         {
-            return _componentDict.TryGetValue(typeof(T), out IComponentData data) ? (T)data : default(T);
+            return _componentDict.TryGetValue(typeof(T), out IComponentData data) ? (T)data : null;
         }
 
-        public void RemoveComponent<T>() where T : IComponentData, new()
+        public void RemoveComponent<T>() where T : class, IComponentData, new()
         {
             if (_componentDict.TryGetValue(typeof(T), out IComponentData data))
             {
                 _componentDict.Remove(typeof(T));
-                ComponentUtility.Push((T)data);
+                ObjectUtility.PushComponent((T)data);
             }
         }
 
         public virtual void Initialize()
         {
+            isInited = true;
         }
 
         public virtual void Destory()
         {
             foreach (var cmpPair in _componentDict)
             {
-                ComponentUtility.Push(cmpPair.Value);
+                ObjectUtility.PushComponent(cmpPair.Value);
             }
             _componentDict.Clear();
+        }
 
-            id = NoneID;
+        public virtual void Reset()
+        {
+            id = ObjectManager.NoneID;
+            isInited = false;
+            isDestoryed = false;
         }
     }
 
     public interface IComponentData
     {
         void Reset();
-    }
-
-    public static class ComponentUtility
-    {
-        private static Dictionary<Type, Stack<IComponentData>> _pool = new Dictionary<Type, Stack<IComponentData>>();
-
-        public static T Pop<T>() where T : IComponentData, new()
-        {
-            if (!_pool.TryGetValue(typeof(T), out Stack<IComponentData> datas))
-            {
-                datas = new Stack<IComponentData>();
-                _pool[typeof(T)] = datas;
-            }
-
-            T result;
-            if (datas.Count > 0)
-            {
-                result = (T)datas.Pop();
-            }
-            else
-            {
-                result = new T();
-                result.Reset();
-            }
-
-            return result;
-        }
-
-        public static void Push<T>(T data) where T : IComponentData
-        {
-            if (!_pool.TryGetValue(typeof(T), out Stack<IComponentData> datas))
-            {
-                datas = new Stack<IComponentData>();
-                _pool[typeof(T)] = datas;
-            }
-            data.Reset();
-            datas.Push(data);
-        }
     }
 }

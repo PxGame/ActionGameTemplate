@@ -15,20 +15,48 @@ namespace AGT
     /// <summary>
     /// ActionMachineObject
     /// </summary>
-    public class ActionMachineObject : TransformObject
+    public class ActionMachineObject : ViewObject
     {
-        public ActionMachineData actionMachine { get; private set; }
+        public ActionMachineData am { get; private set; }
 
         public override void Initialize()
         {
             base.Initialize();
-            actionMachine = AddComponent<ActionMachineData>();
+            am = AddComponent<ActionMachineData>();
         }
 
         public override void Destory()
         {
-            actionMachine = null;
+            am = null;
             base.Destory();
+        }
+    }
+
+    public class ActionMachineData : IComponentData
+    {
+        public string configName;
+        public string stateName;
+
+        public int frameIndex;
+
+        public int waitFrameCnt;
+
+        public int stateBeginFrameIndex;
+        public int animIndex;
+        public float animStartTime;
+
+        public int nextStatePriority;
+        public string nextStateName;
+        public int nextAnimIndex;
+        public float nextAnimStartTime;
+
+        public ActionMachineEvent eventTypes;
+
+        public List<object> globalActionNodes;
+        public List<object> actionNodes;
+
+        public void Reset()
+        {
         }
     }
 }

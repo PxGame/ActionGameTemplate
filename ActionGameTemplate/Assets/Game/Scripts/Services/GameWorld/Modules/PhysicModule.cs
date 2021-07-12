@@ -17,26 +17,24 @@ namespace AGT
     /// </summary>
     public class PhysicModule : IModule
     {
-        public GameWorld gw { get; set; }
-
         public void Destory()
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("PhysicModule Destory");
         }
 
-        public void Initialize()
+        public void Initialize(GameWorld gw)
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("PhysicModule Initialize");
         }
 
         public void LogicUpdate()
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("PhysicModule LogicUpdate");
         }
 
         public void ViewUpdate()
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("PhysicModule ViewUpdate");
         }
     }
 }

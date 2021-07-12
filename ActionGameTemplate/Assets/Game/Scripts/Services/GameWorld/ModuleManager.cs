@@ -25,29 +25,32 @@ namespace AGT
             ViewUpdating,
         }
 
-        public GameWorld gw { get; set; }
         public UpdateState updateState { get; private set; }
 
         private List<IModule> modules;
         private float logicTimer;
 
-        public void Initialize()
+        private GameWorld gw;
+
+        public void Initialize(GameWorld gw)
         {
+            this.gw = gw;
+
             modules = new List<IModule>() {
-            new BeginModule(){ gw = gw},
-            new InputModule(){ gw = gw},
-            new LogicModule(){ gw = gw},
-            new EventModule(){ gw = gw},
-            new PhysicModule(){ gw = gw},
-            new ViewModule(){ gw = gw},
-            new EndModule(){ gw = gw}};
+            new BeginModule(),
+            new InputModule(),
+            new LogicModule(),
+            new EventModule(),
+            new PhysicModule(),
+            new ViewModule(),
+            new EndModule() };
 
             logicTimer = 0f;
             updateState = UpdateState.None;
 
             foreach (var module in modules)
             {
-                module.Initialize();
+                module.Initialize(gw);
             }
         }
 

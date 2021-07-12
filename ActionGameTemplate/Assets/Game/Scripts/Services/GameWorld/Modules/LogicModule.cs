@@ -17,26 +17,24 @@ namespace AGT
     /// </summary>
     public class LogicModule : IModule
     {
-        public GameWorld gw { get; set; }
-
         public void Destory()
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("LogicModule Destory");
         }
 
-        public void Initialize()
+        public void Initialize(GameWorld gw)
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("LogicModule Initialize");
         }
 
         public void LogicUpdate()
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("LogicModule LogicUpdate");
         }
 
         public void ViewUpdate()
         {
-            throw new System.NotImplementedException();
+            SuperLog.Log("LogicModule ViewUpdate");
         }
     }
 }

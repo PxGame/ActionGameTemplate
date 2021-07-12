@@ -36,11 +36,11 @@ namespace AGT
 
         public void OnMonoStart()
         {
-            module = new ModuleManager() { gw = this };
-            obj = new ObjectManager() { gw = this };
-            am = new ActionMachineManager() { gw = this };
+            module = new ModuleManager();
+            obj = new ObjectManager();
+            am = new ActionMachineManager();
 
-            module.Initialize();
+            module.Initialize(this);
         }
     }
 }
