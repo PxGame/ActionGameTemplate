@@ -15,7 +15,21 @@ namespace AGT
     /// <summary>
     /// InputService
     /// </summary>
-    public class InputService 
+    public class InputService : IMonoStart, IMonoDestroy
     {
+        private GameInput input;
+
+        public GameInput.PlayerActions GetPlayerActions() => input.Player;
+
+        public void OnMonoStart()
+        {
+            input = new GameInput();
+            input.Enable();
+        }
+
+        public void OnMonoDestroy()
+        {
+            input.Disable();
+        }
     }
 }

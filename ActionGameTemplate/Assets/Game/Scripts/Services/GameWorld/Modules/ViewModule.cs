@@ -17,24 +17,24 @@ namespace AGT
     /// </summary>
     public class ViewModule : IModule
     {
+        public ModuleManager manager { get; set; }
+
         public void Destory()
         {
             SuperLog.Log("ViewModule Destory");
         }
 
-        public void Initialize(GameWorld gw)
+        public void Initialize()
         {
             SuperLog.Log("ViewModule Initialize");
         }
 
         public void LogicUpdate()
         {
-            SuperLog.Log("ViewModule LogicUpdate");
         }
 
         public void ViewUpdate()
         {
-            SuperLog.Log("ViewModule ViewUpdate");
         }
     }
 }

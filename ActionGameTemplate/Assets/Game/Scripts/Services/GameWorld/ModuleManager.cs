@@ -13,44 +13,41 @@ using XMLib;
 
 namespace AGT
 {
+    public enum UpdateState
+    {
+        None,
+        LogicUpdating,
+        ViewUpdating,
+    }
+
     /// <summary>
     /// ModuleManager
     /// </summary>
-    public class ModuleManager
+    public class ModuleManager : IEnumerable<IModule>
     {
-        public enum UpdateState
-        {
-            None,
-            LogicUpdating,
-            ViewUpdating,
-        }
-
         public UpdateState updateState { get; private set; }
 
-        private List<IModule> modules;
+        private List<IModule> modules = new List<IModule>();
         private float logicTimer;
 
-        private GameWorld gw;
-
-        public void Initialize(GameWorld gw)
+        public void Initialize()
         {
-            this.gw = gw;
-
-            modules = new List<IModule>() {
-            new BeginModule(),
-            new InputModule(),
-            new LogicModule(),
-            new EventModule(),
-            new PhysicModule(),
-            new ViewModule(),
-            new EndModule() };
-
             logicTimer = 0f;
             updateState = UpdateState.None;
 
+            modules.Add(new InitModule());
+            modules.Add(new BeginModule());
+            modules.Add(new InputModule());
+            modules.Add(new LogicModule());
+            modules.Add(new EventModule());
+            modules.Add(new PhysicModule());
+            modules.Add(new ViewModule());
+            modules.Add(new EndModule());
+
             foreach (var module in modules)
             {
-                module.Initialize(gw);
+                module.manager = this;
+                module.Initialize();
             }
         }
 
@@ -60,6 +57,8 @@ namespace AGT
             {
                 module.Destory();
             }
+
+            Game.deltaTime = 0f;
         }
 
         public void Update()
@@ -70,8 +69,9 @@ namespace AGT
 
         private void UpdateLogic()
         {
+            Game.deltaTime = GameWorld.logicDeltaTime;
             updateState = UpdateState.LogicUpdating;
-            logicTimer += GameWorld.deltaTime;
+            logicTimer += GameWorld.renderDeltaTime;
             while (logicTimer > GameWorld.logicDeltaTime)
             {
                 logicTimer -= GameWorld.logicDeltaTime;
@@ -82,16 +82,27 @@ namespace AGT
                 }
             }
             updateState = UpdateState.None;
+            Game.deltaTime = 0f;
         }
 
         private void UpdateView()
         {
+            Game.deltaTime = GameWorld.renderDeltaTime;
             updateState = UpdateState.ViewUpdating;
             foreach (var module in modules)
             {
                 module.ViewUpdate();
             }
             updateState = UpdateState.None;
+            Game.deltaTime = 0f;
         }
+
+        #region IEnumerator<IModule>
+
+        public IEnumerator<IModule> GetEnumerator() => modules.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => modules.GetEnumerator();
+
+        #endregion IEnumerator<IModule>
     }
 }

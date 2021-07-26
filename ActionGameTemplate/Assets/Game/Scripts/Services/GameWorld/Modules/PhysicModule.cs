@@ -17,24 +17,24 @@ namespace AGT
     /// </summary>
     public class PhysicModule : IModule
     {
+        public ModuleManager manager { get; set; }
+
         public void Destory()
         {
             SuperLog.Log("PhysicModule Destory");
         }
 
-        public void Initialize(GameWorld gw)
+        public void Initialize()
         {
             SuperLog.Log("PhysicModule Initialize");
         }
 
         public void LogicUpdate()
         {
-            SuperLog.Log("PhysicModule LogicUpdate");
         }
 
         public void ViewUpdate()
         {
-            SuperLog.Log("PhysicModule ViewUpdate");
         }
     }
 }

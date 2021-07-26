@@ -17,29 +17,24 @@ namespace AGT
     /// </summary>
     public class EndModule : IModule
     {
-        private GameWorld gw;
+        public ModuleManager manager { get; set; }
 
         public void Destory()
         {
             SuperLog.Log("EndModule Destory");
         }
 
-        public void Initialize(GameWorld gw)
+        public void Initialize()
         {
             SuperLog.Log("EndModule Initialize");
-            this.gw = gw;
         }
 
         public void LogicUpdate()
         {
-            SuperLog.Log("EndModule LogicUpdate");
-
-            gw.obj.ApplyDestory();
         }
 
         public void ViewUpdate()
         {
-            SuperLog.Log("EndModule ViewUpdate");
         }
     }
 }

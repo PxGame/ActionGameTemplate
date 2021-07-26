@@ -17,24 +17,24 @@ namespace AGT
     /// </summary>
     public class EventModule : IModule
     {
+        public ModuleManager manager { get; set; }
+
         public void Destory()
         {
             SuperLog.Log("EventModule Destory");
         }
 
-        public void Initialize(GameWorld gw)
+        public void Initialize()
         {
             SuperLog.Log("EventModule Initialize");
         }
 
         public void LogicUpdate()
         {
-            SuperLog.Log("EventModule LogicUpdate");
         }
 
         public void ViewUpdate()
         {
-            SuperLog.Log("EventModule ViewUpdate");
         }
     }
 }

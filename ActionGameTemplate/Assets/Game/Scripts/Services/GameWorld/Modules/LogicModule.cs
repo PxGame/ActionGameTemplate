@@ -17,24 +17,26 @@ namespace AGT
     /// </summary>
     public class LogicModule : IModule
     {
+        public ModuleManager manager { get; set; }
+        public ActionMachineProcessor am { get; private set; }
+
         public void Destory()
         {
             SuperLog.Log("LogicModule Destory");
         }
 
-        public void Initialize(GameWorld gw)
+        public void Initialize()
         {
             SuperLog.Log("LogicModule Initialize");
+            am = new ActionMachineProcessor();
         }
 
         public void LogicUpdate()
         {
-            SuperLog.Log("LogicModule LogicUpdate");
         }
 
         public void ViewUpdate()
         {
-            SuperLog.Log("LogicModule ViewUpdate");
         }
     }
 }

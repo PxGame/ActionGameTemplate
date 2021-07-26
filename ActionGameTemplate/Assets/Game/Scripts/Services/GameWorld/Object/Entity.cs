@@ -13,16 +13,36 @@ using XMLib;
 
 namespace AGT
 {
+    [Flags]
+    public enum EntityStatus
+    {
+        None = 0b0,
+        Inited = 0b1,
+        Destoryed = 0b10,
+    }
+
+    public enum EntityType
+    {
+        Default = 0b0,
+        Player = 0b1,
+        Enemy = 0b10
+    }
+
     /// <summary>
     /// BaseObject
     /// </summary>
-    public class BaseObject
+    public class Entity
     {
         public int id;
-        public bool isInited;
-        public bool isDestoryed;
+        public EntityStatus status;
+        public EntityType type;
 
         private Dictionary<Type, IComponentData> _componentDict = new Dictionary<Type, IComponentData>();
+
+        public T GetOrAddComponent<T>() where T : class, IComponentData, new()
+        {
+            return GetComponent<T>() ?? AddComponent<T>();
+        }
 
         public bool HasComponent<T>() where T : class, IComponentData, new()
         {
@@ -52,7 +72,7 @@ namespace AGT
 
         public virtual void Initialize()
         {
-            isInited = true;
+            status = EntityStatus.Inited;
         }
 
         public virtual void Destory()
@@ -66,9 +86,9 @@ namespace AGT
 
         public virtual void Reset()
         {
-            id = ObjectManager.NoneID;
-            isInited = false;
-            isDestoryed = false;
+            id = EntityManager.NoneID;
+            status = EntityStatus.None;
+            _componentDict.Clear();
         }
     }
 

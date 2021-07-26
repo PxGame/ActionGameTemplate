@@ -2,7 +2,7 @@
  * 作者：Peter Xiang
  * 联系方式：565067150@qq.com
  * 文档: https://github.com/PxGame
- * 创建时间: 2021/7/6 1:35:55
+ * 创建时间: 2021/7/25 13:24:30
  */
 
 using System.Collections;
@@ -12,26 +12,16 @@ using XMLib;
 
 namespace AGT
 {
-    /// <summary>
-    /// ActionMachineObject
-    /// </summary>
-    public class ActionMachineObject : ViewObject
+    public enum ActionMachineEvent
     {
-        public ActionMachineData am { get; private set; }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            am = AddComponent<ActionMachineData>();
-        }
-
-        public override void Destory()
-        {
-            am = null;
-            base.Destory();
-        }
+        None = 0x0,
+        StateChanged = 0x1,
+        AnimChanged = 0x2,
     }
 
+    /// <summary>
+    /// ActionMachineData
+    /// </summary>
     public class ActionMachineData : IComponentData
     {
         public string configName;

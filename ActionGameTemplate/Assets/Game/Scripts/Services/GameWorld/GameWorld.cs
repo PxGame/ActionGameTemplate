@@ -5,8 +5,10 @@
  * 创建时间: 2021/6/26 17:28:15
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using XMLib;
 
@@ -18,29 +20,72 @@ namespace AGT
     public class GameWorld : IMonoUpdate, IMonoStart, IMonoDestroy
     {
         public static float logicDeltaTime => 1f / 30f;
-        public static float deltaTime => Time.deltaTime;
+        public static float renderDeltaTime => Time.unscaledDeltaTime;
 
-        public ModuleManager module { get; private set; }
-        public ObjectManager obj { get; private set; }
-        public ActionMachineManager am { get; private set; }
+        public ModuleManager modules { get; private set; }
+        public EntityManager entities { get; private set; }
+
+        public bool pause { get; set; } = false;
 
         public void OnMonoUpdate()
         {
-            module.Update();
+            if (pause) { return; }
+
+            modules.Update();
         }
 
         public void OnMonoDestroy()
         {
-            module.Destory();
+            modules.Destory();
         }
 
         public void OnMonoStart()
         {
-            module = new ModuleManager();
-            obj = new ObjectManager();
-            am = new ActionMachineManager();
+            modules = new ModuleManager();
+            entities = new EntityManager();
 
-            module.Initialize(this);
+            modules.Initialize();
         }
+
+        #region Entity
+
+        public Entity GetPlayerEntity()
+        {
+            foreach (var entity in entities)
+            {
+                if (entity.type == EntityType.Player)
+                {
+                    return entity;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion Entity
+
+#if UNITY_EDITOR
+
+        #region Debug Page
+
+        public IReadOnlyDictionary<string, Action> debugPageDict => _debugPageDict;
+
+        private Dictionary<string, Action> _debugPageDict = new Dictionary<string, Action>();
+
+        [Conditional("UNITY_EDITOR")]
+        public void AddDebugPage(string pageName, Action onDraw)
+        {
+            _debugPageDict.Add(pageName, onDraw);
+        }
+
+        [Conditional("UNITY_EDITOR")]
+        public void RemoveDebugPage(string pageName)
+        {
+            _debugPageDict.Remove(pageName);
+        }
+
+        #endregion Debug Page
+
+#endif
     }
 }

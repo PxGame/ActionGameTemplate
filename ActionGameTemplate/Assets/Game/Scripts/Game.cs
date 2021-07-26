@@ -17,14 +17,19 @@ namespace AGT
     /// </summary>
     public static class Game
     {
-        public static DeviceService device;
-        public static ResourceService resource;
-        public static ArchiveService archive;
-        public static InputService input;
-        public static CameraService camera;
-        public static AudioService audio;
-        public static UIService ui;
-        public static SceneService scene;
-        public static GameWorld gw;
+        public static DeviceService device { get; set; } = null;
+        public static ResourceService resource { get; set; } = null;
+        public static ArchiveService archive { get; set; } = null;
+        public static InputService input { get; set; } = null;
+        public static CameraService camera { get; set; } = null;
+        public static AudioService audio { get; set; } = null;
+        public static UIService ui { get; set; } = null;
+        public static SceneService scene { get; set; } = null;
+        public static GameWorld gw { get; set; } = null;
+
+        /// <summary>
+        /// 仅用于GameWorld中的循环，根据不同循环，进入循环前会自动赋值对应的deltaTime，退出循环后会重置为0
+        /// </summary>
+        public static float deltaTime { get; set; } = 0f;
     }
 }
