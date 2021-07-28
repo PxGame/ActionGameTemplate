@@ -17,25 +17,24 @@ namespace AGT
     /// </summary>
     public class LogicModule : IModule
     {
-        public ModuleManager manager { get; set; }
         public ActionMachineProcessor am { get; private set; }
 
-        public void Destory()
+        public override void Destory()
         {
             SuperLog.Log("LogicModule Destory");
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             SuperLog.Log("LogicModule Initialize");
             am = new ActionMachineProcessor();
         }
 
-        public void LogicUpdate()
+        public override void LogicUpdate()
         {
         }
 
-        public void ViewUpdate()
+        public override void ViewUpdate()
         {
         }
     }

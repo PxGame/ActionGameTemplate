@@ -72,7 +72,6 @@ namespace AGT
 
         public virtual void Initialize()
         {
-            status = EntityStatus.Inited;
         }
 
         public virtual void Destory()

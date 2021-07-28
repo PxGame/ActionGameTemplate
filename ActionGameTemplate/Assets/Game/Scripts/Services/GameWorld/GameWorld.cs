@@ -41,7 +41,7 @@ namespace AGT
 
         public void OnMonoStart()
         {
-            modules = new ModuleManager();
+            modules = new ModuleManager(this);
             entities = new EntityManager();
 
             modules.Initialize();
@@ -63,29 +63,5 @@ namespace AGT
         }
 
         #endregion Entity
-
-#if UNITY_EDITOR
-
-        #region Debug Page
-
-        public IReadOnlyDictionary<string, Action> debugPageDict => _debugPageDict;
-
-        private Dictionary<string, Action> _debugPageDict = new Dictionary<string, Action>();
-
-        [Conditional("UNITY_EDITOR")]
-        public void AddDebugPage(string pageName, Action onDraw)
-        {
-            _debugPageDict.Add(pageName, onDraw);
-        }
-
-        [Conditional("UNITY_EDITOR")]
-        public void RemoveDebugPage(string pageName)
-        {
-            _debugPageDict.Remove(pageName);
-        }
-
-        #endregion Debug Page
-
-#endif
     }
 }

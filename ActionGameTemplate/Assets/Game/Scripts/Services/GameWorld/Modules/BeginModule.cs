@@ -17,23 +17,21 @@ namespace AGT
     /// </summary>
     public class BeginModule : IModule
     {
-        public ModuleManager manager { get; set; }
-
-        public void Destory()
+        public override void Destory()
         {
             SuperLog.Log("BeginModule Destory");
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             SuperLog.Log("BeginModule Initialize");
         }
 
-        public void LogicUpdate()
+        public override void LogicUpdate()
         {
         }
 
-        public void ViewUpdate()
+        public override void ViewUpdate()
         {
         }
     }

@@ -17,23 +17,21 @@ namespace AGT
     /// </summary>
     public class EventModule : IModule
     {
-        public ModuleManager manager { get; set; }
-
-        public void Destory()
+        public override void Destory()
         {
             SuperLog.Log("EventModule Destory");
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             SuperLog.Log("EventModule Initialize");
         }
 
-        public void LogicUpdate()
+        public override void LogicUpdate()
         {
         }
 
-        public void ViewUpdate()
+        public override void ViewUpdate()
         {
         }
     }

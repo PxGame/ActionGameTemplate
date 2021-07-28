@@ -16,16 +16,19 @@ namespace AGT
     /// <summary>
     /// IModule
     /// </summary>
-    public interface IModule
+    public abstract class IModule
     {
-        ModuleManager manager { get; set; }
+        public GameWorld GameWorld => Game.gw;
+        public ModuleManager ModuleManager => GameWorld.modules;
+        public EntityManager EntityManager => GameWorld.entities;
+        public InputService InputService => Game.input;
 
-        void Initialize();
+        public abstract void Initialize();
 
-        void Destory();
+        public abstract void Destory();
 
-        void LogicUpdate();
+        public abstract void LogicUpdate();
 
-        void ViewUpdate();
+        public abstract void ViewUpdate();
     }
 }

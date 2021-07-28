@@ -23,7 +23,9 @@ namespace AGT
         private int nextId = 1;
 
         private LinkedList<Entity> entities = new LinkedList<Entity>();
-        private Dictionary<int, LinkedListNode<Entity>> id2node = new Dictionary<int, LinkedListNode<Entity>>();
+
+        private Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
+
         private List<int> createIds = new List<int>();
         private List<int> destoryIds = new List<int>();
 
@@ -32,7 +34,7 @@ namespace AGT
             Entity entity = ObjectUtility.PopObject<Entity>();
             entity.id = nextId++;
 
-            id2node.Add(entity.id, entities.AddLast(entity));
+            id2entity.Add(entity.id, entity);
             createIds.Add(entity.id);
 
             return entity;
@@ -47,21 +49,18 @@ namespace AGT
 
         public T Get<T>(int id) where T : Entity
         {
-            return id2node.TryGetValue(id, out LinkedListNode<Entity> node) ? node.Value as T : null;
+            return id2entity.TryGetValue(id, out Entity entity) ? entity as T : null;
         }
 
         public void ApplyInitialize()
         {
             if (createIds.Count <= 0) { return; }
-
             foreach (var id in createIds)
             {
-                LinkedListNode<Entity> node = id2node[id];
-                Entity entity = node.Value;
-                if ((entity.status & EntityStatus.Inited) == 0)
-                {
-                    entity.Initialize();
-                }
+                Entity entity = id2entity[id];
+                entities.AddLast(entity);
+                entity.Initialize();
+                entity.status |= EntityStatus.Inited;
             }
             createIds.Clear();
         }
@@ -69,23 +68,16 @@ namespace AGT
         public void ApplyDestory()
         {
             if (destoryIds.Count <= 0) { return; }
-
             foreach (var id in destoryIds)
             {
-                LinkedListNode<Entity> node = id2node[id];
-                Entity entity = node.Value;
-                if ((entity.status & EntityStatus.Destoryed) != 0)
+                Entity entity = id2entity[id];
+                if ((entity.status & EntityStatus.Inited) != 0)
                 {
-                    if ((entity.status & EntityStatus.Inited) != 0)
-                    {
-                        entity.Destory();
-                    }
-
-                    id2node.Remove(entity.id);
-                    entities.Remove(node);
-
-                    ObjectUtility.PushObject(entity);
+                    entity.Destory();
                 }
+                id2entity.Remove(entity.id);
+                entities.Remove(entity);
+                ObjectUtility.PushObject(entity);
             }
             destoryIds.Clear();
         }

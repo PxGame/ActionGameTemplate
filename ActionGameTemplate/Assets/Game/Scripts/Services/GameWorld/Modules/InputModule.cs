@@ -36,64 +36,60 @@ namespace AGT
     /// </summary>
     public class InputModule : IModule
     {
-        public ModuleManager manager { get; set; }
+        private GameInput.PlayerActions playerActions;
 
-        private GameInput.PlayerActions playerInput;
+        public bool isJump => playerActions.Jump.triggered;
+        public bool isDash => playerActions.Dash.triggered;
+        public bool isAttack => playerActions.Attack.triggered;
+        public bool isAxis => playerActions.Axis.phase == InputActionPhase.Started;
+        public Vector2 axisValue => playerActions.Axis.ReadValue<Vector2>();
 
-        public bool isJump => playerInput.Jump.triggered;
-        public bool isDash => playerInput.Dash.triggered;
-        public bool isAttack => playerInput.Attack.triggered;
-        public bool isAxis => playerInput.Axis.phase == InputActionPhase.Started;
-        public Vector2 axisValue => playerInput.Axis.ReadValue<Vector2>();
-
-        public void Destory()
+        public override void Destory()
         {
             SuperLog.Log("InputModule Destory");
-            Game.gw.RemoveDebugPage(debugPageName);
-
-            playerInput.Disable();
+            playerActions.Disable();
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             SuperLog.Log("InputModule Initialize");
 
-            playerInput = Game.input.GetPlayerActions();
-            playerInput.Enable();
+            playerActions = InputService.GetPlayerActions();
+            playerActions.Enable();
 
-            Game.gw.AddDebugPage(debugPageName, OnDebugGUI);
+            DebugTool.AddPage("Input Monitor", OnDebugPage);
+            DebugTool.AddUpdate(OnDebugUpdate);
         }
 
-        public void LogicUpdate()
+        public override void LogicUpdate()
         {
-            Entity entity = Game.gw.GetPlayerEntity();
+            Entity entity = GameWorld.GetPlayerEntity();
             if (entity == null) { return; }
 
             InputData input = entity.GetOrAddComponent<InputData>();
         }
 
-        public void ViewUpdate()
+        public override void ViewUpdate()
         {
-            DebugViewUpdate();
         }
 
         #region Debug GUI
 
 #if UNITY_EDITOR
 
-        private string debugPageName = "Input";
         private StringBuilder debugText = new StringBuilder();
         private int debugIndex = 0;
         private Vector2 debugAxisValue;
         private InputActionPhase debugAxisPhase;
         private bool debugIsAxis;
 
-        [Conditional("UNITY_EDITOR")]
-        private void DebugViewUpdate()
+        private void OnDebugUpdate()
         {
+            if (!playerActions.enabled) { return; }
+
             debugIsAxis = isAxis;
             debugAxisValue = axisValue;
-            debugAxisPhase = playerInput.Axis.phase;
+            debugAxisPhase = playerActions.Axis.phase;
 
             if (isAttack)
             {
@@ -109,7 +105,7 @@ namespace AGT
             }
         }
 
-        private void OnDebugGUI()
+        private void OnDebugPage()
         {
             EditorGUILayout.TextField("Axis Phase", debugAxisPhase.ToString());
             EditorGUILayout.Toggle("Is Axis", debugIsAxis);

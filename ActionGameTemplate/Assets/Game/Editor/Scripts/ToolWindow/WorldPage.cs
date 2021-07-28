@@ -21,7 +21,7 @@ namespace AGT
     public class WorldPage : AGTToolPage
     {
         public override string title => "世界";
-        private string selectModuleName;
+        private string selectPageName;
 
         public override void OnDisable()
         {
@@ -33,25 +33,20 @@ namespace AGT
 
         public override void OnGUI()
         {
-            if (Game.gw == null)
+            if (!DebugTool.isInited)
             {
-                GUILayout.Label("GameWorld 未创建");
+                GUILayout.Label("DebugTool 未创建");
                 return;
             }
 
             using (var lay = new EditorGUILayout.VerticalScope())
             {
-                string[] moduleNames = Game.gw.debugPageDict.Keys.ToArray();
-                int lastSelectIndex = Array.FindIndex(moduleNames, t => 0 == string.Compare(t, selectModuleName));
-                lastSelectIndex = Mathf.Clamp(lastSelectIndex, -1, moduleNames.Length - 1);
-                int selectIndex = GUILayout.SelectionGrid(lastSelectIndex, moduleNames, moduleNames.Length, GUI.skin.FindStyle("ToolBarButton"));
-                selectModuleName = selectIndex >= 0 ? moduleNames[selectIndex] : (moduleNames.Length > 0 ? moduleNames[0] : string.Empty);
-
-                if (!string.IsNullOrEmpty(selectModuleName))
-                {
-                    Action page = Game.gw.debugPageDict[selectModuleName];
-                    page();
-                }
+                string[] pageNames = DebugTool.pageDict.Keys.ToArray();
+                int lastSelectIndex = Array.FindIndex(pageNames, t => 0 == string.Compare(t, selectPageName));
+                lastSelectIndex = Mathf.Clamp(lastSelectIndex, -1, pageNames.Length - 1);
+                int selectIndex = GUILayout.SelectionGrid(lastSelectIndex, pageNames, pageNames.Length, GUI.skin.FindStyle("ToolBarButton"));
+                selectPageName = selectIndex >= 0 ? pageNames[selectIndex] : (pageNames.Length > 0 ? pageNames[0] : string.Empty);
+                DebugTool.RunPage(selectPageName);
             }
         }
 
