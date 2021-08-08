@@ -23,7 +23,7 @@ namespace AGT
     /// <summary>
     /// EntityManager
     /// </summary>
-    public class EntityManager : IEnumerable<Entity>
+    public class EntityManager : IManager, IEnumerable<Entity>
     {
         public static readonly int NoneID = 0;
         private int nextId = 1;
@@ -32,8 +32,11 @@ namespace AGT
 
         private Dictionary<int, Entity> id2entity = new Dictionary<int, Entity>();
 
-        private List<int> createIds = new List<int>();
-        private List<int> destoryIds = new List<int>();
+        private List<int> _createIds = new List<int>();
+        private List<int> _destoryIds = new List<int>();
+
+        public IReadOnlyList<int> createIds => _createIds;
+        public IReadOnlyList<int> destoryIds => _destoryIds;
 
         public Entity Create()
         {
@@ -41,25 +44,26 @@ namespace AGT
             entity.id = nextId++;
 
             id2entity.Add(entity.id, entity);
-            createIds.Add(entity.id);
+            _createIds.Add(entity.id);
 
             return entity;
         }
 
         public void Initialize()
         {
-            DebugTool.AddPage("实体", OnEntityPage);
+            DebugTool.AddPage("实体", OnDebugPage);
         }
 
         public void Destory()
         {
+            DebugTool.RemovePage("实体");
         }
 
         public void Destory(Entity entity)
         {
             if (entity == null || (entity.status & EntityStatus.Destoryed) != 0) { return; }
             entity.status |= EntityStatus.Destoryed;
-            destoryIds.Add(entity.id);
+            _destoryIds.Add(entity.id);
         }
 
         public void Destory(int entityId)
@@ -75,35 +79,35 @@ namespace AGT
 
         public void ApplyInitialize()
         {
-            if (createIds.Count <= 0) { return; }
-            foreach (var id in createIds)
+            if (_createIds.Count <= 0) { return; }
+            foreach (var id in _createIds)
             {
                 Entity entity = id2entity[id];
                 entities.AddLast(entity);
                 entity.Initialize();
                 entity.status |= EntityStatus.Inited;
             }
-            createIds.Clear();
+            _createIds.Clear();
         }
 
         public void ApplyDestory()
         {
-            if (destoryIds.Count <= 0) { return; }
-            foreach (var id in destoryIds)
+            if (_destoryIds.Count <= 0) { return; }
+            foreach (var id in _destoryIds)
             {
                 Entity entity = id2entity[id];
                 if ((entity.status & EntityStatus.Inited) != 0)
                 {
                     entity.Destory();
+                    entities.Remove(entity);
                 }
                 id2entity.Remove(entity.id);
-                entities.Remove(entity);
                 ObjectUtility.PushObject(entity);
             }
-            destoryIds.Clear();
+            _destoryIds.Clear();
         }
 
-        #region Entity
+        #region Entity Foreach
 
         public IEnumerable<(Entity entity, T1 cmp1)> Foreach<T1>() where T1 : class, IComponentData, new()
         {
@@ -153,7 +157,7 @@ namespace AGT
             }
         }
 
-        #endregion Entity
+        #endregion Entity Foreach
 
         #region IEnumerable<Entity>
 
@@ -170,8 +174,9 @@ namespace AGT
         private Vector2 debugScrollPos = Vector2.zero;
         private Vector2 debugScrollPos2 = Vector2.zero;
         private int debugEntityId = 0;
+        private bool debugEnableEdit = false;
 
-        private void OnEntityPage()
+        private void OnDebugPage()
         {
             if (GUILayout.Button("Add Entity"))
             {
@@ -180,10 +185,13 @@ namespace AGT
                 entity.AddComponent<ActionMachineData>();
                 entity.AddComponent<InputData>();
                 var tran = entity.AddComponent<TransformData>();
-                entity.AddComponent<ViewData>();
+                var view = entity.AddComponent<ViewData>();
+                entity.AddComponent<PhysicData>();
 
                 tran.position = UnityEngine.Random.insideUnitSphere * 10;
                 tran.rotation = UnityEngine.Random.rotation;
+
+                view.resourcePath = "Cube";
             }
 
             List<int> ids = ListPool<int>.Pop();
@@ -191,20 +199,25 @@ namespace AGT
             ids.Sort();
 
             GUILayout.BeginHorizontal();
-            using (var scroll = new EditorGUILayout.ScrollViewScope(debugScrollPos, GUILayout.Width(300)))
+            using (var scroll = new EditorGUILayout.ScrollViewScope(debugScrollPos, GUILayout.Width(250)))
             {
                 foreach (var id in ids)
                 {
                     Entity entity = id2entity[id];
 
-                    GUILayout.BeginHorizontal();
+                    GUILayout.BeginHorizontal("ProfilerDetailViewBackground");
 
-                    EditorGUILayout.LabelField(entity.id.ToString(), GUILayout.Width(50));
-                    EditorGUILayout.LabelField(entity.status.ToString(), GUILayout.Width(100));
+                    EditorGUILayout.LabelField(entity.id.ToString(), GUILayout.Width(40));
+                    EditorGUILayout.LabelField(entity.status.ToString(), GUILayout.Width(80));
 
                     if (GUILayout.Button("查看"))
                     {
                         debugEntityId = id;
+                        EntityView view = Game.gw.views.Get(id);
+                        if (view != null)
+                        {
+                            Selection.activeObject = view.gameObject;
+                        }
                     }
 
                     if (GUILayout.Button("销毁"))
@@ -218,15 +231,21 @@ namespace AGT
                 debugScrollPos = scroll.scrollPosition;
             }
 
+            GUILayout.BeginVertical();
+            debugEnableEdit = EditorGUILayoutEx.DrawObject("启用编辑", debugEnableEdit);
             using (var scroll = new EditorGUILayout.ScrollViewScope(debugScrollPos2, GUI.skin.box))
             {
                 Entity entity = Get(debugEntityId);
                 if (entity != null)
                 {
-                    EditorGUILayoutEx.DrawObject(string.Empty, entity);
+                    using (var disable = new EditorGUI.DisabledGroupScope(!debugEnableEdit))
+                    {
+                        EditorGUILayoutEx.DrawObject(string.Empty, entity);
+                    }
                 }
                 debugScrollPos2 = scroll.scrollPosition;
             }
+            GUILayout.EndVertical();
 
             ListPool<int>.Push(ids);
             GUILayout.EndHorizontal();
@@ -237,15 +256,12 @@ namespace AGT
         {
             Entity entity = obj as Entity;
 
-            using (var disable = new EditorGUI.DisabledGroupScope(true))
-            {
-                EditorGUILayoutEx.DrawObject("ID", entity.id);
-                EditorGUILayoutEx.DrawObject("Status", entity.status);
+            EditorGUILayoutEx.DrawObject("ID", entity.id);
+            EditorGUILayoutEx.DrawObject("Status", entity.status);
 
-                foreach (var cmpPair in entity.components)
-                {
-                    EditorGUILayoutEx.DrawObject(cmpPair.Key.GetSimpleName(), cmpPair.Value, cmpPair.Key);
-                }
+            foreach (var cmpPair in entity.components)
+            {
+                EditorGUILayoutEx.DrawObject(cmpPair.Key.GetSimpleName(), cmpPair.Value, cmpPair.Key);
             }
 
             return obj;

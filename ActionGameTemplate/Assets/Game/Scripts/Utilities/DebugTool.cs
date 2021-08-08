@@ -83,6 +83,12 @@ namespace AGT
         }
 
         [Conditional("UNITY_EDITOR")]
+        public static void RemovePage(string pageName)
+        {
+            instance._pageDict.Remove(pageName);
+        }
+
+        [Conditional("UNITY_EDITOR")]
         public static void AddGizmo(Action onGizmo)
         {
             Init();
@@ -90,10 +96,22 @@ namespace AGT
         }
 
         [Conditional("UNITY_EDITOR")]
+        public static void RemoveGizmo(Action onGizmo)
+        {
+            instance._gizmosList.Remove(onGizmo);
+        }
+
+        [Conditional("UNITY_EDITOR")]
         public static void AddUpdate(Action onUpdate)
         {
             Init();
             instance._updateList.Add(onUpdate);
+        }
+
+        [Conditional("UNITY_EDITOR")]
+        public static void RemoveUpdate(Action onUpdate)
+        {
+            instance._updateList.Remove(onUpdate);
         }
 
 #endif

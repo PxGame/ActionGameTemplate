@@ -21,6 +21,7 @@ namespace AGT
         public GameWorld GameWorld => Game.gw;
         public ModuleManager ModuleManager => GameWorld.modules;
         public EntityManager EntityManager => GameWorld.entities;
+        public ViewManager ViewManager => GameWorld.views;
         public InputService InputService => Game.input;
 
         public abstract void Initialize();

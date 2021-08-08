@@ -24,8 +24,11 @@ namespace AGT
 
         public ModuleManager modules { get; private set; }
         public EntityManager entities { get; private set; }
+        public ViewManager views { get; private set; }
 
         public bool pause { get; set; } = false;
+
+        private List<IManager> managers = new List<IManager>();
 
         public void OnMonoUpdate()
         {
@@ -36,17 +39,33 @@ namespace AGT
 
         public void OnMonoDestroy()
         {
-            entities.Destory();
-            modules.Destory();
+            DestoryManager();
         }
 
         public void OnMonoStart()
         {
-            modules = new ModuleManager();
-            entities = new EntityManager();
+            InitializeManager();
+        }
 
-            modules.Initialize();
-            entities.Initialize();
+        private void InitializeManager()
+        {
+            modules = new ModuleManager(); managers.Add(modules);
+            entities = new EntityManager(); managers.Add(entities);
+            views = new ViewManager(); managers.Add(views);
+
+            foreach (var manager in managers)
+            {
+                manager.Initialize();
+            }
+        }
+
+        private void DestoryManager()
+        {
+            foreach (var manager in managers)
+            {
+                manager.Destory();
+            }
+            managers.Clear();
         }
 
         #region Entity

@@ -23,7 +23,7 @@ namespace AGT
     /// <summary>
     /// ModuleManager
     /// </summary>
-    public class ModuleManager : IEnumerable<IModule>
+    public class ModuleManager : IManager, IEnumerable<IModule>
     {
         public UpdateState updateState { get; private set; }
 

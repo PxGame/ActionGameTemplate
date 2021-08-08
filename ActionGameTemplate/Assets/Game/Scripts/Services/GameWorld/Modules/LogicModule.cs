@@ -22,13 +22,13 @@ namespace AGT
         public override void Destory()
         {
             //SuperLog.Log("LogicModule Destory");
+            DebugTool.RemoveGizmo(OnGizmo);
         }
 
         public override void Initialize()
         {
             //SuperLog.Log("LogicModule Initialize");
             am = new ActionMachineProcessor();
-
             DebugTool.AddGizmo(OnGizmo);
         }
 

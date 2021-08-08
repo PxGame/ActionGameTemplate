@@ -29,10 +29,25 @@ namespace AGT
 
         public override void LogicUpdate()
         {
+            foreach (var data in EntityManager.Foreach<TransformData, ViewData>())
+            {
+                if ((data.entity.status & EntityStatus.Destoryed) != 0)
+                {
+                    ViewManager.Destory(data.entity);
+                }
+                else if (!data.cmp2.isCreated)
+                {
+                    ViewManager.Create(data.entity);
+                }
+            }
         }
 
         public override void ViewUpdate()
         {
+            foreach (var data in EntityManager.Foreach<TransformData, ViewData>())
+            {
+                ViewManager.Update(data.entity, data.cmp1, data.cmp2);
+            }
         }
     }
 }

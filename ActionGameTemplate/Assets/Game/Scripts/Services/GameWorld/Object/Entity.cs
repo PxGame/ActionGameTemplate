@@ -49,6 +49,12 @@ namespace AGT
             return data;
         }
 
+        public T AddComponent<T>(T component) where T : class, IComponentData, new()
+        {
+            components.Add(component.GetType(), component);
+            return component;
+        }
+
         public T GetComponent<T>() where T : class, IComponentData, new()
         {
             return components.TryGetValue(typeof(T), out IComponentData data) ? (T)data : null;

@@ -48,6 +48,9 @@ namespace AGT
         {
             //SuperLog.Log("InputModule Destory");
             playerActions.Disable();
+
+            DebugTool.RemovePage("输入");
+            DebugTool.RemoveUpdate(OnDebugUpdate);
         }
 
         public override void Initialize()
