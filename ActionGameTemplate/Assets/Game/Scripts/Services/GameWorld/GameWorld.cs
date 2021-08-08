@@ -36,15 +36,17 @@ namespace AGT
 
         public void OnMonoDestroy()
         {
+            entities.Destory();
             modules.Destory();
         }
 
         public void OnMonoStart()
         {
-            modules = new ModuleManager(this);
+            modules = new ModuleManager();
             entities = new EntityManager();
 
             modules.Initialize();
+            entities.Initialize();
         }
 
         #region Entity
@@ -53,7 +55,8 @@ namespace AGT
         {
             foreach (var entity in entities)
             {
-                if (entity.type == EntityType.Player)
+                TagData tag = entity.GetComponent<TagData>();
+                if (tag != null && tag.value == EntityTag.Player)
                 {
                     return entity;
                 }

@@ -46,18 +46,18 @@ namespace AGT
 
         public override void Destory()
         {
-            SuperLog.Log("InputModule Destory");
+            //SuperLog.Log("InputModule Destory");
             playerActions.Disable();
         }
 
         public override void Initialize()
         {
-            SuperLog.Log("InputModule Initialize");
+            //SuperLog.Log("InputModule Initialize");
 
             playerActions = InputService.GetPlayerActions();
             playerActions.Enable();
 
-            DebugTool.AddPage("Input Monitor", OnDebugPage);
+            DebugTool.AddPage("输入", OnDebugPage);
             DebugTool.AddUpdate(OnDebugUpdate);
         }
 

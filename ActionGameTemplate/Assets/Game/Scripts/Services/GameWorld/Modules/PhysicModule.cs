@@ -19,12 +19,12 @@ namespace AGT
     {
         public override void Destory()
         {
-            SuperLog.Log("PhysicModule Destory");
+            //SuperLog.Log("PhysicModule Destory");
         }
 
         public override void Initialize()
         {
-            SuperLog.Log("PhysicModule Initialize");
+            //SuperLog.Log("PhysicModule Initialize");
         }
 
         public override void LogicUpdate()

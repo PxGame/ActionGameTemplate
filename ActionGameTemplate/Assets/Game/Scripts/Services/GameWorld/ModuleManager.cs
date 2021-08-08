@@ -25,15 +25,13 @@ namespace AGT
     /// </summary>
     public class ModuleManager : IEnumerable<IModule>
     {
-        public GameWorld world { get; private set; }
         public UpdateState updateState { get; private set; }
 
         private List<IModule> modules = new List<IModule>();
         private float logicTimer;
 
-        public ModuleManager(GameWorld gw)
+        public ModuleManager()
         {
-            this.world = gw;
         }
 
         public void Initialize()

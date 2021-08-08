@@ -21,13 +21,15 @@ namespace AGT
 
         public override void Destory()
         {
-            SuperLog.Log("LogicModule Destory");
+            //SuperLog.Log("LogicModule Destory");
         }
 
         public override void Initialize()
         {
-            SuperLog.Log("LogicModule Initialize");
+            //SuperLog.Log("LogicModule Initialize");
             am = new ActionMachineProcessor();
+
+            DebugTool.AddGizmo(OnGizmo);
         }
 
         public override void LogicUpdate()
@@ -37,5 +39,21 @@ namespace AGT
         public override void ViewUpdate()
         {
         }
+
+        #region OnGizmo
+
+#if UNITY_EDITOR
+
+        private void OnGizmo()
+        {
+            foreach (var data in EntityManager.Foreach<TransformData>())
+            {
+                DrawUtility.G.DrawCross(1, data.cmp1.matrix);
+            }
+        }
+
+#endif
+
+        #endregion OnGizmo
     }
 }

@@ -21,23 +21,16 @@ namespace AGT
         Destoryed = 0b10,
     }
 
-    public enum EntityType
-    {
-        Default = 0b0,
-        Player = 0b1,
-        Enemy = 0b10
-    }
-
     /// <summary>
-    /// BaseObject
+    /// Entity
     /// </summary>
     public class Entity
     {
         public int id;
-        public EntityStatus status;
-        public EntityType type;
 
-        private Dictionary<Type, IComponentData> _componentDict = new Dictionary<Type, IComponentData>();
+        public EntityStatus status;
+
+        public Dictionary<Type, IComponentData> components = new Dictionary<Type, IComponentData>();
 
         public T GetOrAddComponent<T>() where T : class, IComponentData, new()
         {
@@ -46,26 +39,26 @@ namespace AGT
 
         public bool HasComponent<T>() where T : class, IComponentData, new()
         {
-            return _componentDict.ContainsKey(typeof(T));
+            return components.ContainsKey(typeof(T));
         }
 
         public T AddComponent<T>() where T : class, IComponentData, new()
         {
             T data = ObjectUtility.PopComponent<T>();
-            _componentDict.Add(typeof(T), data);
+            components.Add(typeof(T), data);
             return data;
         }
 
         public T GetComponent<T>() where T : class, IComponentData, new()
         {
-            return _componentDict.TryGetValue(typeof(T), out IComponentData data) ? (T)data : null;
+            return components.TryGetValue(typeof(T), out IComponentData data) ? (T)data : null;
         }
 
         public void RemoveComponent<T>() where T : class, IComponentData, new()
         {
-            if (_componentDict.TryGetValue(typeof(T), out IComponentData data))
+            if (components.TryGetValue(typeof(T), out IComponentData data))
             {
-                _componentDict.Remove(typeof(T));
+                components.Remove(typeof(T));
                 ObjectUtility.PushComponent((T)data);
             }
         }
@@ -76,18 +69,18 @@ namespace AGT
 
         public virtual void Destory()
         {
-            foreach (var cmpPair in _componentDict)
+            foreach (var cmpPair in components)
             {
                 ObjectUtility.PushComponent(cmpPair.Value);
             }
-            _componentDict.Clear();
+            components.Clear();
         }
 
         public virtual void Reset()
         {
             id = EntityManager.NoneID;
             status = EntityStatus.None;
-            _componentDict.Clear();
+            components.Clear();
         }
     }
 

@@ -43,7 +43,7 @@ namespace AGT
                 {
                     actions.RemoveAt(i);
                     i--;
-                    return;
+                    continue;
                 }
                 action.Invoke();
             }

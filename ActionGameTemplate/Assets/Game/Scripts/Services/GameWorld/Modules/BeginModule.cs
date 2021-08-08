@@ -19,16 +19,17 @@ namespace AGT
     {
         public override void Destory()
         {
-            SuperLog.Log("BeginModule Destory");
+            //SuperLog.Log("BeginModule Destory");
         }
 
         public override void Initialize()
         {
-            SuperLog.Log("BeginModule Initialize");
+            //SuperLog.Log("BeginModule Initialize");
         }
 
         public override void LogicUpdate()
         {
+            EntityManager.ApplyInitialize();
         }
 
         public override void ViewUpdate()
