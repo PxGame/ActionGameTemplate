@@ -12,6 +12,12 @@ using System.Diagnostics;
 using UnityEngine;
 using XMLib;
 
+#if UNITY_EDITOR
+
+using UnityEditor;
+
+#endif
+
 namespace AGT
 {
     /// <summary>
@@ -20,7 +26,9 @@ namespace AGT
     public class GameWorld : IMonoUpdate, IMonoStart, IMonoDestroy
     {
         public static float logicDeltaTime => 1f / 30f;
-        public static float renderDeltaTime => Time.unscaledDeltaTime;
+        public static float renderDeltaTime => Time.unscaledDeltaTime * renderTimeScale;
+
+        public static float renderTimeScale = 1f;
 
         public ModuleManager modules { get; private set; }
         public EntityManager entities { get; private set; }
@@ -40,11 +48,15 @@ namespace AGT
         public void OnMonoDestroy()
         {
             DestoryManager();
+
+            DebugTool.RemovePage("游戏世界");
         }
 
         public void OnMonoStart()
         {
+            renderTimeScale = 1f;
             InitializeManager();
+            DebugTool.AddPage("游戏世界", OnGameWorldPage);
         }
 
         private void InitializeManager()
@@ -85,5 +97,18 @@ namespace AGT
         }
 
         #endregion Entity
+
+        #region GameWorld Page
+
+#if UNITY_EDITOR
+
+        private void OnGameWorldPage()
+        {
+            renderTimeScale = EditorGUILayout.Slider("渲染时间缩放", renderTimeScale, 0, 10);
+        }
+
+#endif
+
+        #endregion GameWorld Page
     }
 }

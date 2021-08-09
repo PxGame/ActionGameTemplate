@@ -29,24 +29,24 @@ namespace AGT
 
         public override void LogicUpdate()
         {
-            foreach (var data in EntityManager.Foreach<TransformData, ViewData>())
+            foreach (var (entity, _, viewData) in EntityManager.Foreach<TransformData, ViewData>())
             {
-                if ((data.entity.status & EntityStatus.Destoryed) != 0)
+                if ((entity.status & EntityStatus.Destoryed) != 0)
                 {
-                    ViewManager.Destory(data.entity);
+                    ViewManager.Destory(entity);
                 }
-                else if (!data.cmp2.isCreated)
+                else if (!viewData.isCreated)
                 {
-                    ViewManager.Create(data.entity);
+                    ViewManager.Create(entity);
                 }
             }
         }
 
         public override void ViewUpdate()
         {
-            foreach (var data in EntityManager.Foreach<TransformData, ViewData>())
+            foreach (var (entity, transfromData, viewData) in EntityManager.Foreach<TransformData, ViewData>())
             {
-                ViewManager.Update(data.entity, data.cmp1, data.cmp2);
+                ViewManager.Update(entity, transfromData, viewData);
             }
         }
     }

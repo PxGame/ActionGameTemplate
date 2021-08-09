@@ -109,7 +109,8 @@ namespace AGT
 
         #region Entity Foreach
 
-        public IEnumerable<(Entity entity, T1 cmp1)> Foreach<T1>() where T1 : class, IComponentData, new()
+        public IEnumerable<(Entity, T1)> Foreach<T1>()
+            where T1 : class, IComponentData, new()
         {
             foreach (var entity in entities)
             {
@@ -121,7 +122,7 @@ namespace AGT
             }
         }
 
-        public IEnumerable<(Entity entity, T1 cmp1, T2 cmp2)> Foreach<T1, T2>()
+        public IEnumerable<(Entity, T1, T2)> Foreach<T1, T2>()
             where T1 : class, IComponentData, new()
             where T2 : class, IComponentData, new()
         {
@@ -137,7 +138,7 @@ namespace AGT
             }
         }
 
-        public IEnumerable<(Entity entity, T1 cmp1, T2 cmp2, T3 cmp3)> Foreach<T1, T2, T3>()
+        public IEnumerable<(Entity, T1, T2, T3)> Foreach<T1, T2, T3>()
             where T1 : class, IComponentData, new()
             where T2 : class, IComponentData, new()
             where T3 : class, IComponentData, new()
@@ -178,20 +179,23 @@ namespace AGT
 
         private void OnDebugPage()
         {
-            if (GUILayout.Button("Add Entity"))
+            if (GUILayout.Button("Add 25 Entity"))
             {
-                Entity entity = Create();
-                entity.AddComponent<TagData>();
-                entity.AddComponent<ActionMachineData>();
-                entity.AddComponent<InputData>();
-                var tran = entity.AddComponent<TransformData>();
-                var view = entity.AddComponent<ViewData>();
-                entity.AddComponent<PhysicData>();
+                for (int i = 0; i < 25; i++)
+                {
+                    Entity entity = Create();
+                    entity.AddComponent<TagData>();
+                    entity.AddComponent<ActionMachineData>();
+                    entity.AddComponent<InputData>();
+                    var tran = entity.AddComponent<TransformData>();
+                    var view = entity.AddComponent<ViewData>();
+                    entity.AddComponent<PhysicData>();
 
-                tran.position = UnityEngine.Random.insideUnitSphere * 10;
-                tran.rotation = UnityEngine.Random.rotation;
+                    tran.position = UnityEngine.Random.insideUnitSphere * 10;
+                    tran.rotation = UnityEngine.Random.rotation;
 
-                view.resourcePath = "Cube";
+                    view.resourcePath = "Cube";
+                }
             }
 
             List<int> ids = ListPool<int>.Pop();
