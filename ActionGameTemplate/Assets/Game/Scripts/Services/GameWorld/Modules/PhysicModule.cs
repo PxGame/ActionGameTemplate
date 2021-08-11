@@ -29,9 +29,12 @@ namespace AGT
 
         public override void LogicUpdate()
         {
-            foreach (var (entity, transformData, physicData) in EntityManager.Foreach<TransformData, PhysicData>())
+            foreach (var (entity, transformData, physicData, timeData) in EntityManager.Foreach<TransformData, PhysicData, TimeData>())
             {
-                transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * Game.deltaTime)).normalized;
+                for (int i = 0; i < timeData.needUpdateLogicCount; i++)
+                {
+                    transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * Game.deltaTime)).normalized;
+                }
             }
         }
 

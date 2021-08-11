@@ -176,12 +176,14 @@ namespace AGT
         private Vector2 debugScrollPos2 = Vector2.zero;
         private int debugEntityId = 0;
         private bool debugEnableEdit = false;
+        private int debugCreateCnt = 1;
 
         private void OnDebugPage()
         {
-            if (GUILayout.Button("Add 25 Entity"))
+            debugCreateCnt = EditorGUILayout.IntField("创建数量", debugCreateCnt);
+            if (GUILayout.Button("创建实体"))
             {
-                for (int i = 0; i < 25; i++)
+                for (int i = 0; i < debugCreateCnt; i++)
                 {
                     Entity entity = Create();
                     entity.AddComponent<TagData>();
@@ -190,6 +192,7 @@ namespace AGT
                     var tran = entity.AddComponent<TransformData>();
                     var view = entity.AddComponent<ViewData>();
                     entity.AddComponent<PhysicData>();
+                    entity.AddComponent<TimeData>();
 
                     tran.position = UnityEngine.Random.insideUnitSphere * 10;
                     tran.rotation = UnityEngine.Random.rotation;

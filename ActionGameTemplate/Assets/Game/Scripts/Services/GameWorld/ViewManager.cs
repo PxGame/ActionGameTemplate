@@ -87,7 +87,7 @@ namespace AGT
             viewData.isCreated = false;
         }
 
-        public void Update(Entity entity, TransformData transformData, ViewData viewData)
+        public void Update(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)
         {
             if (!entity2view.TryGetValue(entity.id, out EntityView view))
             {

@@ -16,11 +16,11 @@ using System;
 namespace AGT
 {
     /// <summary>
-    /// WorldPage
+    /// RuntimePage
     /// </summary>
-    public class WorldPage : AGTToolPage
+    public class RuntimePage : AGTToolPage
     {
-        public override string title => "世界";
+        public override string title => "运行时";
         private string selectPageName;
 
         public override void OnDisable()

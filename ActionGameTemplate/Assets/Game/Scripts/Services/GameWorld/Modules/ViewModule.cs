@@ -44,9 +44,9 @@ namespace AGT
 
         public override void ViewUpdate()
         {
-            foreach (var (entity, transfromData, viewData) in EntityManager.Foreach<TransformData, ViewData>())
+            foreach (var (entity, transfromData, viewData, timeData) in EntityManager.Foreach<TransformData, ViewData, TimeData>())
             {
-                ViewManager.Update(entity, transfromData, viewData);
+                ViewManager.Update(entity, transfromData, viewData, timeData);
             }
         }
     }
