@@ -224,6 +224,11 @@ namespace AGT
                         if (view != null)
                         {
                             Selection.activeObject = view.gameObject;
+
+                            if (SceneView.lastActiveSceneView != null)
+                            {
+                                SceneView.lastActiveSceneView.LookAt(view.gameObject.transform.position);
+                            }
                         }
                     }
 

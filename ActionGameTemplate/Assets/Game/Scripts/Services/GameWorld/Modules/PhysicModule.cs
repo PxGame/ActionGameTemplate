@@ -5,6 +5,7 @@
  * 创建时间: 2021/6/28 0:25:22
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,11 +21,13 @@ namespace AGT
         public override void Destory()
         {
             //SuperLog.Log("PhysicModule Destory");
+            DebugTool.RemoveGizmo(OnDebugGizmo);
         }
 
         public override void Initialize()
         {
             //SuperLog.Log("PhysicModule Initialize");
+            DebugTool.AddGizmo(OnDebugGizmo);
         }
 
         public override void LogicUpdate()
@@ -34,6 +37,7 @@ namespace AGT
                 for (int i = 0; i < timeData.needUpdateLogicCount; i++)
                 {
                     transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * Game.deltaTime)).normalized;
+                    transformData.position += physicData.velocity * 2 * Game.deltaTime;
                 }
             }
         }
@@ -41,5 +45,17 @@ namespace AGT
         public override void ViewUpdate()
         {
         }
+
+#if UNITY_EDITOR
+
+        private void OnDebugGizmo()
+        {
+            foreach (var (entity, transformData) in EntityManager.Foreach<TransformData>())
+            {
+                DrawUtility.G.DrawAxes(transformData.matrix);
+            }
+        }
+
+#endif
     }
 }

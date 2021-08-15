@@ -45,7 +45,7 @@ namespace AGT
                     timeData.needUpdateLogicCount = frameCount - timeData.logicFrameCount;
                     timeData.logicFrameCount = frameCount;
 
-                    timeData.beginRenderTimer = timeData.endRenderTimer;
+                    timeData.beginRenderTimer = timeData.renderTimer;
                     timeData.endRenderTimer += timeData.needUpdateLogicCount * Game.deltaTime;
                 }
                 else
@@ -68,6 +68,7 @@ namespace AGT
                     timeData.renderDeltaTime = nextRenderTimer - timeData.renderTimer;
                 }
                 timeData.renderTimer = nextRenderTimer;
+                timeData.renderTimeStep = Mathf.Clamp01(timeData.renderTimer <= timeData.beginRenderTimer ? 0f : (timeData.renderTimer - timeData.beginRenderTimer) / (timeData.endRenderTimer - timeData.beginRenderTimer));
             }
         }
     }

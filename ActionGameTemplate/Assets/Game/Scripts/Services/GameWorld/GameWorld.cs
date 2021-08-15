@@ -26,7 +26,7 @@ namespace AGT
     public class GameWorld : IMonoUpdate, IMonoStart, IMonoDestroy
     {
         public static float logicDeltaTime => 1f / 30f;
-        public static float renderDeltaTime => Time.unscaledDeltaTime * renderTimeScale;
+        public static float renderDeltaTime => Time.deltaTime * renderTimeScale;
 
         public static float renderTimeScale = 1f;
 
@@ -105,6 +105,7 @@ namespace AGT
         private void OnGameWorldPage()
         {
             renderTimeScale = EditorGUILayout.Slider("渲染时间缩放", renderTimeScale, 0, 10);
+            UnityEngine.Application.targetFrameRate = EditorGUILayout.IntSlider("帧数限制", UnityEngine.Application.targetFrameRate, 0, 144);
         }
 
 #endif

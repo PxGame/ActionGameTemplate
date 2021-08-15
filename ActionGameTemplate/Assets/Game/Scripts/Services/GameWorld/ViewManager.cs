@@ -94,8 +94,8 @@ namespace AGT
                 return;
             }
 
-            view.transform.position = transformData.position;
-            view.transform.rotation = transformData.rotation;
+            view.transform.position = Vector3.Lerp(view.transform.position, transformData.position, timeData.renderTimeStep);
+            view.transform.rotation = Quaternion.Lerp(view.transform.rotation, transformData.rotation, timeData.renderTimeStep);
         }
     }
 }

@@ -46,10 +46,6 @@ namespace AGT
 
         private void OnGizmo()
         {
-            foreach (var (_, transformData) in EntityManager.Foreach<TransformData>())
-            {
-                DrawUtility.G.DrawCross(1, transformData.matrix);
-            }
         }
 
 #endif
