@@ -5,6 +5,7 @@
  * 创建时间: 2021/8/9 0:39:10
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -89,13 +90,11 @@ namespace AGT
 
         public void Update(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)
         {
-            if (!entity2view.TryGetValue(entity.id, out EntityView view))
+            if (!entity2view.TryGetValue(entity.id, out EntityView view) || view == null)
             {
                 return;
             }
-
-            view.transform.position = Vector3.Lerp(view.transform.position, transformData.position, timeData.renderTimeStep);
-            view.transform.rotation = Quaternion.Lerp(view.transform.rotation, transformData.rotation, timeData.renderTimeStep);
+            view.OnViewUpdate(entity, transformData, viewData, timeData);
         }
     }
 }

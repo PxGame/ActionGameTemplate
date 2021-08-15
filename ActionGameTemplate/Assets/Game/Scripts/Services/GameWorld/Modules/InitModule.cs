@@ -37,21 +37,11 @@ namespace AGT
                     timeData.nextTimeScale = float.NaN;
                 }
 
-                timeData.logicTimer += Game.deltaTime * timeData.timeScale;
+                float deltaTime = Game.deltaTime * timeData.timeScale;
 
-                int frameCount = (int)(timeData.logicTimer / Game.deltaTime);
-                if (frameCount > timeData.logicFrameCount)
-                {
-                    timeData.needUpdateLogicCount = frameCount - timeData.logicFrameCount;
-                    timeData.logicFrameCount = frameCount;
-
-                    timeData.beginRenderTimer = timeData.renderTimer;
-                    timeData.endRenderTimer += timeData.needUpdateLogicCount * Game.deltaTime;
-                }
-                else
-                {
-                    timeData.needUpdateLogicCount = 0;
-                }
+                timeData.logicTimer += deltaTime;
+                timeData.renderTotalTime = (timeData.renderTotalTime - timeData.renderTimer) + deltaTime;
+                timeData.renderTimer = 0f;
             }
         }
 
@@ -59,16 +49,17 @@ namespace AGT
         {
             foreach (var (entity, timeData) in EntityManager.Foreach<TimeData>())
             {
-                timeData.renderDeltaTime = Game.deltaTime * timeData.timeScale;
-
-                float nextRenderTimer = timeData.renderTimer + timeData.renderDeltaTime;
-                if (nextRenderTimer > timeData.endRenderTimer)
+                float deltaTime = Game.deltaTime * timeData.timeScale;
+                float nextRenderTimer = timeData.renderTimer + deltaTime;
+                if (nextRenderTimer > timeData.renderTotalTime)
                 {
-                    nextRenderTimer = timeData.endRenderTimer;
-                    timeData.renderDeltaTime = nextRenderTimer - timeData.renderTimer;
+                    nextRenderTimer = timeData.renderTotalTime;
+                    deltaTime = nextRenderTimer - timeData.renderTimer;
                 }
+
+                timeData.renderDeltaTime = deltaTime;
                 timeData.renderTimer = nextRenderTimer;
-                timeData.renderTimeStep = Mathf.Clamp01(timeData.renderTimer <= timeData.beginRenderTimer ? 0f : (timeData.renderTimer - timeData.beginRenderTimer) / (timeData.endRenderTimer - timeData.beginRenderTimer));
+                timeData.renderTimeStep = (timeData.renderTimer > 0 && timeData.renderTotalTime > 0) ? timeData.renderTimer / timeData.renderTotalTime : 0;
             }
         }
     }

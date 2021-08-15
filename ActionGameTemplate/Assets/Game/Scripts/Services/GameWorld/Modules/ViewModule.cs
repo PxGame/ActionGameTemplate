@@ -29,7 +29,7 @@ namespace AGT
 
         public override void LogicUpdate()
         {
-            foreach (var (entity, _, viewData) in EntityManager.Foreach<TransformData, ViewData>())
+            foreach (var (entity, viewData) in EntityManager.Foreach<ViewData>())
             {
                 if ((entity.status & EntityStatus.Destoryed) != 0)
                 {

@@ -34,11 +34,13 @@ namespace AGT
         {
             foreach (var (entity, transformData, physicData, timeData) in EntityManager.Foreach<TransformData, PhysicData, TimeData>())
             {
-                for (int i = 0; i < timeData.needUpdateLogicCount; i++)
-                {
-                    transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * Game.deltaTime)).normalized;
-                    transformData.position += physicData.velocity * 2 * Game.deltaTime;
-                }
+                float deltaTime = timeData.timeScale * Game.deltaTime;
+
+                transformData.lastPosition = transformData.position;
+                transformData.lastRotation = transformData.rotation;
+
+                transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * deltaTime)).normalized;
+                transformData.position += physicData.velocity * deltaTime;
             }
         }
 

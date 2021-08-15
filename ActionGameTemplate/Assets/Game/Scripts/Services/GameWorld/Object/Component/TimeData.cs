@@ -17,30 +17,25 @@ namespace AGT
     /// </summary>
     public class TimeData : IComponentData
     {
-        public int logicFrameCount;
         public float logicTimer;
+
+        public float renderTotalTime;
         public float renderTimer;
-        public float beginRenderTimer;
-        public float endRenderTimer;
-        public int needUpdateLogicCount;
         public float renderDeltaTime;
-        public float timeScale;
         public float renderTimeStep;
 
+        public float timeScale;
         public float nextTimeScale;
 
         public void Reset()
         {
-            logicFrameCount = 0;
             logicTimer = 0f;
             renderTimer = 0f;
-            beginRenderTimer = 0f;
-            endRenderTimer = 0f;
-            needUpdateLogicCount = 0;
+            renderTotalTime = 0f;
             renderDeltaTime = 0f;
-            timeScale = 1f;
             renderTimeStep = 0f;
 
+            timeScale = 1f;
             nextTimeScale = float.NaN;
         }
     }
