@@ -60,32 +60,26 @@ namespace AGT
 
         public void Create(Entity entity)
         {
+            if (entity == null || (entity.status & EntityStatus.ViewCreated) != 0) { return; }
+
             ViewData viewData = entity.GetComponent<ViewData>();
             TransformData transformData = entity.GetComponent<TransformData>();
-            if (viewData == null || viewData.isCreated || transformData == null) { return; }
+            if (viewData == null || transformData == null) { return; }
 
             EntityView view = CreateEntityView(transformData, viewData);
             entity2view.Add(entity.id, view);
-            viewData.isCreated = true;
+            entity.status |= EntityStatus.ViewCreated;
         }
 
         public void Destory(Entity entity)
         {
-            if (entity == null)
-            {
-                return;
-            }
+            if (entity == null || (entity.status & EntityStatus.ViewCreated) == 0) { return; }
 
-            ViewData viewData = entity.GetComponent<ViewData>();
-            if (viewData == null || !viewData.isCreated)
-            {
-                return;
-            }
+            entity.status &= ~EntityStatus.ViewCreated;
 
             EntityView view = entity2view[entity.id];
             entity2view.Remove(entity.id);
             DestoryEntityView(view);
-            viewData.isCreated = false;
         }
 
         public void Update(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)

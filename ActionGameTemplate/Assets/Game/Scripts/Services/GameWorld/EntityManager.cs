@@ -206,16 +206,17 @@ namespace AGT
             ids.Sort();
 
             GUILayout.BeginHorizontal();
-            using (var scroll = new EditorGUILayout.ScrollViewScope(debugScrollPos, GUILayout.Width(250)))
+            using (var scroll = new EditorGUILayout.ScrollViewScope(debugScrollPos, GUILayout.Width(200)))
             {
                 foreach (var id in ids)
                 {
                     Entity entity = id2entity[id];
 
                     GUILayout.BeginHorizontal("ProfilerDetailViewBackground");
+                    Rect rect = GUILayoutUtility.GetRect(EditorGUIUtility.singleLineHeight, EditorGUIUtility.singleLineHeight);
+                    EditorGUI.DrawRect(rect, GetStatueStyle(entity));
 
-                    EditorGUILayout.LabelField(entity.id.ToString(), GUILayout.Width(40));
-                    EditorGUILayout.LabelField(entity.status.ToString(), GUILayout.Width(80));
+                    EditorGUILayout.LabelField(entity.id.ToString(), GUILayout.Width(50));
 
                     if (GUILayout.Button("查看"))
                     {
@@ -261,6 +262,16 @@ namespace AGT
 
             ListPool<int>.Push(ids);
             GUILayout.EndHorizontal();
+
+            return;
+
+            Color GetStatueStyle(Entity entity)
+            {
+                if ((entity.status & EntityStatus.Destoryed) != 0) { return Color.red; }
+                if ((entity.status & EntityStatus.InitedAndViewCreated) == EntityStatus.InitedAndViewCreated) { return new Color(0, 0.74f, 0); }
+                if ((entity.status & EntityStatus.Inited) != 0) { return Color.blue; }
+                return Color.white;
+            }
         }
 
         [ObjectDrawer(typeof(Entity))]

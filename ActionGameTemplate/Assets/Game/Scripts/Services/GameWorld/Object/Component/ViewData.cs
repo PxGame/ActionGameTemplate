@@ -18,12 +18,10 @@ namespace AGT
     public class ViewData : IComponentData
     {
         public string resourcePath;
-        public bool isCreated;
 
         public void Reset()
         {
             resourcePath = string.Empty;
-            isCreated = false;
         }
     }
 }

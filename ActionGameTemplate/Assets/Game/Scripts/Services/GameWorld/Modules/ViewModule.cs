@@ -35,7 +35,7 @@ namespace AGT
                 {
                     ViewManager.Destory(entity);
                 }
-                else if (!viewData.isCreated)
+                else if ((entity.status & EntityStatus.ViewCreated) == 0)
                 {
                     ViewManager.Create(entity);
                 }

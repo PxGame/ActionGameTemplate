@@ -19,6 +19,11 @@ namespace AGT
         None = 0b0,
         Inited = 0b1,
         Destoryed = 0b10,
+        ViewCreated = 0b100,
+
+        //扩展
+
+        InitedAndViewCreated = Inited | ViewCreated
     }
 
     /// <summary>
