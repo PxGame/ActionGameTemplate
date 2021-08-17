@@ -39,7 +39,7 @@ namespace AGT
                 transformData.lastPosition = transformData.position;
                 transformData.lastRotation = transformData.rotation;
 
-                transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * deltaTime)).normalized;
+                //transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * deltaTime)).normalized;
                 transformData.position += physicData.velocity * deltaTime;
             }
         }

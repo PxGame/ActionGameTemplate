@@ -194,10 +194,12 @@ namespace AGT
                     entity.AddComponent<PhysicData>();
                     entity.AddComponent<TimeData>();
 
-                    tran.position = UnityEngine.Random.insideUnitSphere * 10;
-                    tran.rotation = UnityEngine.Random.rotation;
+                    Vector3 position = UnityEngine.Random.insideUnitSphere * 10;
+                    position.y = 0f;
+                    tran.position = position;
+                    tran.rotation = Quaternion.identity;
 
-                    view.resourcePath = "Cube";
+                    view.resourcePath = "Nordstrom";
                 }
             }
 

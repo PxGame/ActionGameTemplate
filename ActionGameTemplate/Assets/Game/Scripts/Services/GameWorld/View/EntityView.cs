@@ -17,10 +17,22 @@ namespace AGT
     /// </summary>
     public class EntityView : MonoBehaviour
     {
+        private List<IViewControl> controls = new List<IViewControl>();
+
+        private void Awake()
+        {
+            GetComponents<IViewControl>(controls);
+        }
+
         public virtual void OnViewUpdate(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)
         {
             transform.position = Vector3.Lerp(transformData.lastPosition, transformData.position, timeData.renderTimeStep);
             transform.rotation = Quaternion.Lerp(transformData.lastRotation, transformData.rotation, timeData.renderTimeStep);
+
+            foreach (var control in controls)
+            {
+                control.OnViewUpdate(entity, transformData, viewData, timeData);
+            }
         }
     }
 }
