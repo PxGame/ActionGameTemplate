@@ -56,7 +56,7 @@ namespace XMLib
         public static object CreateInstance(Type type, AvailableTypesAttribute availableTypes)
         {
             if (availableTypes != null && !typeof(IList).IsAssignableFrom(type))
-            {
+            {//仅用于当前对象类型不是IList，否则直接实例化
                 return availableTypes.CreateValueFromDefaultType();
             }
 

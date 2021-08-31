@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
@@ -58,20 +59,23 @@ namespace XMLib
                 typeof(Vector2Int),
                 typeof(Vector3Int),
                 typeof(string),
+                typeof(AnimationCurve),
         };
 
-        private bool SupportExpandType(Type type)
+        private bool SupportExpandType(Type type, List<string> pathStack)
         {
             if (type.IsPrimitive || !(type.IsClass || type.IsValueType) || notSupportExpandTypes.Contains(type))
             {
                 return false;
             }
 
-            if (type.IsClass && typeof(ICollection).IsAssignableFrom(type))
-            {
+            if (type.IsClass &&
+                type.GetInterfaces().Any(x => x == typeof(ICollection) || x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICollection<>))
+                )
+            {//检查是否是容器，如果是容器，且不是IList，则报异常
                 if (!typeof(IList).IsAssignableFrom(type) || (type.IsGenericType && type.GenericTypeArguments.Length != 1))
                 {//限制容器类型为 IList，并且只能有一个模板参数
-                    throw new RuntimeException($"Not surpport {type}");
+                    throw new RuntimeException($"不支持类型未继承列表（IList）的容器（ICollection/ICollection<>）类型 {type}，[{target.GetType()}]/{GetPath(pathStack)}");
                 }
             }
 
@@ -81,7 +85,7 @@ namespace XMLib
         private IEnumerable<ResolvedField> Foreach(object parent, List<string> pathStack)
         {
             Type type = parent.GetType();
-            if (!SupportExpandType(type))
+            if (!SupportExpandType(type, pathStack))
             {
                 yield break;
             }
@@ -90,54 +94,57 @@ namespace XMLib
             foreach (var field in fields)
             {
                 object fieldValue = field.GetValue(parent);
-                Type fieldType = field.FieldType;
+                Type fieldType = fieldValue?.GetType() ?? field.FieldType;//优先获取实例的类型
 
                 AvailableTypesAttribute at = field.GetCustomAttribute<AvailableTypesAttribute>(true);
                 if (fieldValue == null)
                 {//数据为null时，填充默认数据
                     fieldValue = AvailableTypesUtility.CreateInstance(fieldType, at);
+                    fieldType = fieldValue.GetType();//使用实例的类型
                     field.SetValue(parent, fieldValue);
                 }
 
-                pathStack.Add(field.Name);
+                pathStack.Add(field.Name);//路径入栈 01
                 ResolvedField resolvedField = new ResolvedField(this, GetPath(pathStack));
                 yield return resolvedField;
 
-                if (typeof(IList).IsAssignableFrom(fieldType))
-                {
-                    var list = fieldValue as IList;
-
-                    Type itemType = fieldType.GenericTypeArguments[0];
-
-                    for (int i = 0; i < list.Count; i++)
+                if (SupportExpandType(fieldType, pathStack))
+                {//当前属性支持展开
+                    if (typeof(IList).IsAssignableFrom(fieldType))
                     {
-                        object item = list[i];
-                        if (item == null)
+                        var list = fieldValue as IList;
+
+                        Type itemType = fieldType.GenericTypeArguments[0];
+
+                        for (int i = 0; i < list.Count; i++)
                         {
-                            item = AvailableTypesUtility.CreateInstance(itemType, at);
-                            list[i] = item;
+                            object item = list[i];
+                            if (item == null)
+                            {
+                                item = AvailableTypesUtility.CreateInstance(itemType, at);
+                                list[i] = item;
+                            }
+
+                            pathStack.Add($"{listItemFlag}{i}");//路径入栈 02
+                            ResolvedField resolvedField2 = new ResolvedField(this, GetPath(pathStack));
+                            yield return resolvedField2;
+                            foreach (var subResolveField in Foreach(item, pathStack))
+                            {
+                                yield return subResolveField;
+                            }
+                            pathStack.RemoveAt(pathStack.Count - 1);//路径出栈 02
                         }
-
-                        pathStack.Add($"{listItemFlag}{i}");
-                        ResolvedField resolvedField2 = new ResolvedField(this, GetPath(pathStack));
-                        yield return resolvedField2;
-
-                        foreach (var subResolveField in Foreach(item, pathStack))
+                    }
+                    else
+                    {
+                        foreach (var subResolveField in Foreach(fieldValue, pathStack))
                         {
                             yield return subResolveField;
                         }
+                    }
+                }
 
-                        pathStack.RemoveAt(pathStack.Count - 1);
-                    }
-                }
-                else
-                {
-                    foreach (var subResolveField in Foreach(fieldValue, pathStack))
-                    {
-                        yield return subResolveField;
-                    }
-                }
-                pathStack.RemoveAt(pathStack.Count - 1);
+                pathStack.RemoveAt(pathStack.Count - 1);//路径出栈 01
             }
         }
 
