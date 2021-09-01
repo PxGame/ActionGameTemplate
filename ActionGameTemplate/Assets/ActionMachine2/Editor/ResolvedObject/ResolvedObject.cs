@@ -93,6 +93,8 @@ namespace XMLib
             var fields = type.GetFields();
             foreach (var field in fields)
             {
+                pathStack.Add(field.Name);//路径入栈 01
+
                 object fieldValue = field.GetValue(parent);
                 Type fieldType = fieldValue?.GetType() ?? field.FieldType;//优先获取实例的类型
 
@@ -104,7 +106,6 @@ namespace XMLib
                     field.SetValue(parent, fieldValue);
                 }
 
-                pathStack.Add(field.Name);//路径入栈 01
                 ResolvedField resolvedField = new ResolvedField(this, GetPath(pathStack));
                 yield return resolvedField;
 
@@ -113,25 +114,28 @@ namespace XMLib
                     if (typeof(IList).IsAssignableFrom(fieldType))
                     {
                         var list = fieldValue as IList;
+                        AvailableItemTypesAttribute ait = field.GetCustomAttribute<AvailableItemTypesAttribute>(true);
 
                         Type itemType = fieldType.GenericTypeArguments[0];
 
                         for (int i = 0; i < list.Count; i++)
                         {
+                            pathStack.Add($"{listItemFlag}{i}");//路径入栈 02
+
                             object item = list[i];
                             if (item == null)
                             {
-                                item = AvailableTypesUtility.CreateInstance(itemType, at);
+                                item = AvailableTypesUtility.CreateInstance(itemType, ait);
                                 list[i] = item;
                             }
 
-                            pathStack.Add($"{listItemFlag}{i}");//路径入栈 02
                             ResolvedField resolvedField2 = new ResolvedField(this, GetPath(pathStack));
                             yield return resolvedField2;
                             foreach (var subResolveField in Foreach(item, pathStack))
                             {
                                 yield return subResolveField;
                             }
+
                             pathStack.RemoveAt(pathStack.Count - 1);//路径出栈 02
                         }
                     }
