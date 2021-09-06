@@ -109,7 +109,7 @@ namespace XMLib
                     field.SetValue(parent, fieldValue);
                 }
 
-                ResolvedField resolvedField = new ResolvedField(this, GetPath(pathStack));
+                ResolvedField resolvedField = new ResolvedField(this, GetPath(pathStack), pathStack.Count);
                 yield return resolvedField;
 
                 if (SupportExpandType(fieldType, pathStack))
@@ -132,7 +132,7 @@ namespace XMLib
                                 list[i] = item;
                             }
 
-                            ResolvedField resolvedField2 = new ResolvedField(this, GetPath(pathStack));
+                            ResolvedField resolvedField2 = new ResolvedField(this, GetPath(pathStack), pathStack.Count);
                             yield return resolvedField2;
                             foreach (var subResolveField in Foreach(item, pathStack))
                             {
@@ -218,6 +218,16 @@ namespace XMLib
             }
 
             return results;
+        }
+
+        public IEnumerable<ResolvedField> ForeachChild(ResolvedField field)
+        {
+            if (field.resolvedObject != this)
+            {
+                throw new RuntimeException($"传入的Field不属于当前的Object");
+            }
+            int childDepth = field.depth + 1;
+            return fields.Where(t => t.depth == childDepth && t.fieldPath.StartsWith(field.fieldPath));
         }
     }
 }

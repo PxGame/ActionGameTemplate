@@ -20,9 +20,11 @@ namespace XMLib
     {
         private ResolvedObject _resolvedObject;
         private string _fieldPath;
+        private int _depth;
 
-        public ResolvedObject resolvedObject { get => _resolvedObject; }
-        public string fieldPath { get => _fieldPath; }
+        public ResolvedObject resolvedObject => _resolvedObject;
+        public string fieldPath => _fieldPath;
+        public int depth => _depth;
 
         public string[] GetPaths()
         {
@@ -34,13 +36,14 @@ namespace XMLib
             int hashCode = resolvedObject.target.GetHashCode();
             object value = GetValue();
             Type valueType = value.GetType();
-            return $"[{hashCode}]({fieldPath}):{value}|{valueType}";
+            return $"[{hashCode}]<{depth}>({fieldPath}):{value}@{valueType}";
         }
 
-        public ResolvedField(ResolvedObject resolvedObject, string fieldPath)
+        public ResolvedField(ResolvedObject resolvedObject, string fieldPath, int depth)
         {
             _resolvedObject = resolvedObject;
             _fieldPath = fieldPath;
+            _depth = depth;
         }
 
         public object SetValue(object value)
@@ -54,6 +57,11 @@ namespace XMLib
         {
             var infos = _resolvedObject.GetInfos(this);
             return infos.value;
+        }
+
+        public IEnumerable<ResolvedField> ForeachChild()
+        {
+            return _resolvedObject.ForeachChild(this);
         }
     }
 
