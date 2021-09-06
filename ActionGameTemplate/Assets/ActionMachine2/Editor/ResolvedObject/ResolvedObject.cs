@@ -50,6 +50,9 @@ namespace XMLib
             }
         }
 
+        /// <summary>
+        /// 不支持展开的类型列表，为可以被Json序列化且被Unity可视化编辑的类型
+        /// </summary>
         private static HashSet<Type> notSupportExpandTypes
             = new HashSet<Type>() {
                 typeof(Quaternion),
@@ -161,6 +164,60 @@ namespace XMLib
                 stringBuilder.Append(pathSeparator);
             }
             return stringBuilder.ToString();
+        }
+
+        public ResolvedFieldInfo GetInfos(ResolvedField field)
+        {
+            if (field.resolvedObject != this)
+            {
+                throw new RuntimeException($"传入的Field不属于当前的Object");
+            }
+
+            ResolvedFieldInfo results = new ResolvedFieldInfo { index = -1 };
+
+            string[] paths = field.GetPaths();
+
+            object obj = target;
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                string path = paths[i];
+                object parent = obj;
+
+                if (path[0] == ResolvedObject.listItemFlag)
+                {
+                    string indexStr = path.Remove(0, 1);
+                    int index = int.Parse(indexStr);
+
+                    if (parent is not IList list)
+                    {
+                        throw new RuntimeException($"实例不是 IList 类型，但路径节点为列表元素，所以无法获取对应路径上的实例");
+                    }
+
+                    obj = list[index];
+
+                    results.parent = list;
+                    results.index = index;
+                    results.value = obj;
+                }
+                else
+                {
+                    FieldInfo info = parent.GetType().GetField(path);
+                    obj = info.GetValue(parent);
+
+                    results.parent = parent;
+                    results.fieldInfo = info;
+                    results.index = -1;
+                    results.value = obj;
+                }
+            }
+
+            if (results.parent == null || results.fieldInfo == null)
+            {
+                throw new RuntimeException($"GetInfos 数据不完整");
+            }
+
+            return results;
         }
     }
 }
