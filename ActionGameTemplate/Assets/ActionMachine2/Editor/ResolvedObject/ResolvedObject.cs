@@ -78,7 +78,7 @@ namespace XMLib
             {//检查是否是容器，如果是容器，且不是IList，则报异常
                 if (!typeof(IList).IsAssignableFrom(type) || (type.IsGenericType && type.GenericTypeArguments.Length != 1))
                 {//限制容器类型为 IList，并且只能有一个模板参数
-                    throw new RuntimeException($"不支持类型未继承列表（IList）的容器（ICollection/ICollection<>）类型 {type}，[{target.GetType()}]/{GetPath(pathStack)}");
+                    throw new RuntimeException($"不支持类型未继承列表（IList）的容器（ICollection/ICollection<>）类型 {type}，[{target.GetType()}]/{BuildPath(pathStack)}");
                 }
             }
 
@@ -109,7 +109,7 @@ namespace XMLib
                     field.SetValue(parent, fieldValue);
                 }
 
-                ResolvedField resolvedField = new ResolvedField(this, GetPath(pathStack), pathStack.Count);
+                ResolvedField resolvedField = new ResolvedField(this, BuildPath(pathStack), pathStack.Count);
                 yield return resolvedField;
 
                 if (SupportExpandType(fieldType, pathStack))
@@ -132,7 +132,7 @@ namespace XMLib
                                 list[i] = item;
                             }
 
-                            ResolvedField resolvedField2 = new ResolvedField(this, GetPath(pathStack), pathStack.Count);
+                            ResolvedField resolvedField2 = new ResolvedField(this, BuildPath(pathStack), pathStack.Count);
                             yield return resolvedField2;
                             foreach (var subResolveField in Foreach(item, pathStack))
                             {
@@ -155,7 +155,7 @@ namespace XMLib
             }
         }
 
-        private string GetPath(List<string> pathStack)
+        private string BuildPath(List<string> pathStack)
         {
             StringBuilder stringBuilder = new StringBuilder();
             foreach (var path in pathStack)

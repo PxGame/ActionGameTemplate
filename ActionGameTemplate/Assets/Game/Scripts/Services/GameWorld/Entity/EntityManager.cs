@@ -40,7 +40,7 @@ namespace AGT
 
         public Entity Create()
         {
-            Entity entity = ObjectUtility.PopObject<Entity>();
+            Entity entity = PoolUtility.PopObject<Entity>();
             entity.id = nextId++;
 
             id2entity.Add(entity.id, entity);
@@ -102,7 +102,7 @@ namespace AGT
                     entities.Remove(entity);
                 }
                 id2entity.Remove(entity.id);
-                ObjectUtility.PushObject(entity);
+                PoolUtility.PushObject(entity);
             }
             _destoryIds.Clear();
         }
@@ -297,12 +297,12 @@ namespace AGT
         #endregion Entity GUI
     }
 
-    public static class ObjectUtility
+    public static class PoolUtility
     {
         private static MultiTypeObjectPool<IComponentData> _componentPool;
         private static MultiTypeObjectPool<Entity> _entityPool;
 
-        static ObjectUtility()
+        static PoolUtility()
         {
             _componentPool = new MultiTypeObjectPool<IComponentData>()
             {

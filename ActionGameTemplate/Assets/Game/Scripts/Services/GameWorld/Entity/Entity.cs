@@ -49,7 +49,7 @@ namespace AGT
 
         public T AddComponent<T>() where T : class, IComponentData, new()
         {
-            T data = ObjectUtility.PopComponent<T>();
+            T data = PoolUtility.PopComponent<T>();
             components.Add(typeof(T), data);
             return data;
         }
@@ -70,7 +70,7 @@ namespace AGT
             if (components.TryGetValue(typeof(T), out IComponentData data))
             {
                 components.Remove(typeof(T));
-                ObjectUtility.PushComponent((T)data);
+                PoolUtility.PushComponent((T)data);
             }
         }
 
@@ -82,7 +82,7 @@ namespace AGT
         {
             foreach (var cmpPair in components)
             {
-                ObjectUtility.PushComponent(cmpPair.Value);
+                PoolUtility.PushComponent(cmpPair.Value);
             }
             components.Clear();
         }
