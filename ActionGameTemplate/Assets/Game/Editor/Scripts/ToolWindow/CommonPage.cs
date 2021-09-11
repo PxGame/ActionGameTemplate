@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 using XMLib;
@@ -65,6 +66,17 @@ namespace AGT
                 a.c = 2.0f;
                 var buffer = a.ToBytes();
                 var c = ObjectUtility.FromBytes<A>(buffer);
+            }
+            if (GUILayout.Button("Test5"))
+            {
+                A a = new A();
+
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in DatabaseManager.Foreach(a))
+                {
+                    sb.AppendLine(item.ToString());
+                }
+                Debug.Log(sb.ToString());
             }
         }
 
