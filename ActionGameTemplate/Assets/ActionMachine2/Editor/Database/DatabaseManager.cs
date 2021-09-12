@@ -29,9 +29,11 @@ namespace XMLib
         private Dictionary<string, object> id2src = new Dictionary<string, object>();
         private Dictionary<string, string> alias2id = new Dictionary<string, string>();
 
-        public string AddData(object data, string aliasName = null)
+        private Dictionary<string, ElementInfo> path2info = new Dictionary<string, ElementInfo>();
+
+        public string AddData(object src, string aliasName = null)
         {
-            if (src2id.ContainsKey(src2id)) { throw new RuntimeException($"数据实例已存在，请勿重复添加"); }
+            if (src2id.ContainsKey(src)) { throw new RuntimeException($"数据实例已存在，请勿重复添加"); }
             string id = Guid.NewGuid().ToString("N");
 
             if (!string.IsNullOrEmpty(aliasName))
@@ -41,17 +43,72 @@ namespace XMLib
                 alias2id[aliasName] = id;
             }
 
-            src2id[data] = id;
-            id2src[id] = data;
+            src2id[src] = id;
+            id2src[id] = src;
 
-            UpdateObjectStructure(data);
+            UpdateData(src);
 
             return id;
         }
 
-        private void UpdateObjectStructure(object data)
+        public void UpdateData(object src)
         {
+            if (!src2id.TryGetValue(src, out string id))
+            {
+                throw new RuntimeException($"该对象没有添加");
+            }
+
+            //移除旧的数据
+            List<string> removePaths = ListPool<string>.Pop();
+            removePaths.AddRange(path2info.Keys.Where(t => t.StartsWith(id)));
+            foreach (var path in removePaths)
+            {
+                path2info.Remove(path);
+            }
+            ListPool<string>.Push(removePaths);
+
+            //添加新的数据
+            foreach (var info in Foreach(id, src))
+            {
+                path2info.Add(info.path, info);
+            }
         }
+
+        //public void SetValue(string fullPath, object value)
+        //{
+        //    string[] paths = fullPath.Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries);
+
+        //    string id = paths[0];
+
+        //    if (!id2src.TryGetValue(id, out object data)) { throw new RuntimeException($"{fullPath} 指向的源不存在"); }
+
+        //    object parent = data;
+
+        //    for (int i = 1; i < paths.Length; i++)
+        //    {
+        //        string path = paths[i];
+
+        //        if (path[0] == listItemFlag)
+        //        {
+        //            string indexStr = path.Remove(0, 1);
+        //            int index = int.Parse(indexStr);
+
+        //            if (parent is not IList list)
+        //            {
+        //                throw new RuntimeException($"实例不是 IList 类型，但路径节点为列表元素，所以无法获取对应路径上的实例");
+        //            }
+
+        //            list[index] = value;
+        //        }
+        //        else
+        //        {
+        //            FieldInfo info = parent.GetType().GetField(path);
+        //            obj = info.GetValue(parent);
+        //        }
+        //    }
+        //}
+
+        #region Foreach
 
         /// <summary>
         /// 不支持展开的类型列表，为可以被Json序列化且被Unity可视化编辑的类型
@@ -88,9 +145,10 @@ namespace XMLib
             return true;
         }
 
-        public static IEnumerable<ForeachInfo> Foreach(object parent)
+        public static IEnumerable<ElementInfo> Foreach(string id, object parent)
         {
             List<string> pathStack = ListPool<string>.Pop();
+            pathStack.Add(id);
             foreach (var item in _Foreach(parent, pathStack))
             {
                 yield return item;
@@ -98,7 +156,7 @@ namespace XMLib
             ListPool<string>.Push(pathStack);
         }
 
-        private static IEnumerable<ForeachInfo> _Foreach(object parent, List<string> pathStack)
+        private static IEnumerable<ElementInfo> _Foreach(object parent, List<string> pathStack)
         {
             Type type = parent.GetType();
             if (!SupportExpandType(type))
@@ -121,22 +179,20 @@ namespace XMLib
                     fieldType = fieldValue.GetType();//使用实例的类型
                     field.SetValue(parent, fieldValue);
                 }
+                bool isList = typeof(IList).IsAssignableFrom(fieldType);
+                bool canExpand = SupportExpandType(fieldType);
 
-                yield return new ForeachInfo()
+                yield return new ElementInfo()
                 {
-                    parent = parent,
-                    fieldInfo = field,
-                    value = fieldValue,
-                    type = fieldType,
+                    availableTypes = at,
+                    declareType = field.FieldType,
                     path = BuildPath(pathStack),
-                    depth = pathStack.Count,
-                    list = null,
-                    index = -1
+                    value = fieldValue
                 };
 
-                if (SupportExpandType(fieldType))
+                if (canExpand)
                 {//当前属性支持展开
-                    if (typeof(IList).IsAssignableFrom(fieldType))
+                    if (isList)
                     {//当前成员变量为IList时
                         var list = fieldValue as IList;
                         AvailableItemTypesAttribute ait = field.GetCustomAttribute<AvailableItemTypesAttribute>(true);
@@ -154,16 +210,12 @@ namespace XMLib
                                 list[i] = item;
                             }
 
-                            yield return new ForeachInfo()
+                            yield return new ElementInfo()
                             {
-                                parent = parent,
-                                fieldInfo = field,
-                                value = item,
-                                type = itemType,
+                                availableTypes = ait,
+                                declareType = itemType,
                                 path = BuildPath(pathStack),
-                                depth = pathStack.Count,
-                                list = list,
-                                index = i
+                                value = item
                             };
 
                             foreach (var subResolveField in _Foreach(item, pathStack))
@@ -197,55 +249,37 @@ namespace XMLib
             }
             return stringBuilder.ToString();
         }
+
+        #endregion Foreach
     }
 
     namespace Database
     {
-        public struct ForeachInfo
+        public class ElementInfo
         {
             /// <summary>
-            ///  index >= 0 时，list 为 parent 的成员变量，否则 value 为 parent 的成员变量
+            /// 可用的有效类型
             /// </summary>
-            internal object parent;
+            public IAvailableTypesAttribute availableTypes;
 
             /// <summary>
-            /// parent 成员变量信息
+            /// 声名的类型
             /// </summary>
-            internal FieldInfo fieldInfo;
+            public Type declareType;
 
             /// <summary>
-            /// value 的类型
+            /// 值
             /// </summary>
-            internal Type type;
-
-            /// <summary>
-            /// index >= 0 时，为 list[index] 的值, 否则为 fieldInfo.GetValue(parent)的值
-            /// </summary>
-            internal object value;
+            public object value;
 
             /// <summary>
             /// value 的路径
             /// </summary>
-            internal string path;
-
-            /// <summary>
-            /// value 的深度
-            /// </summary>
-            internal int depth;
-
-            /// <summary>
-            /// index >=0 时，list 有效，且为 value 的容器
-            /// </summary>
-            internal IList list;
-
-            /// <summary>
-            /// value 在 list 中的序号
-            /// </summary>
-            internal int index;
+            public string path;
 
             public override string ToString()
             {
-                return $"[{depth}]{path} = {value}";
+                return $"{path} = {value}";
             }
         }
     }

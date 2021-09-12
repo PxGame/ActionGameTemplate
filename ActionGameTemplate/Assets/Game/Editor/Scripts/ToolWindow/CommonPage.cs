@@ -71,12 +71,10 @@ namespace AGT
             {
                 A a = new A();
 
-                StringBuilder sb = new StringBuilder();
-                foreach (var item in DatabaseManager.Foreach(a))
-                {
-                    sb.AppendLine(item.ToString());
-                }
-                Debug.Log(sb.ToString());
+                DatabaseManager db = new DatabaseManager();
+                db.AddData(a);
+
+                db.UpdateData(a);
             }
         }
 
