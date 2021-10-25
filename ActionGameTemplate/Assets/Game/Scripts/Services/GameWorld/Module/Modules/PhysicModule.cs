@@ -32,15 +32,25 @@ namespace AGT
 
         public override void LogicUpdate()
         {
+            foreach (var (entity, viewData) in EntityManager.Foreach<PhysicData>())
+            {
+                if ((entity.status & EntityStatus.Destoryed) != 0)
+                {
+                }
+                else if ((entity.status & EntityStatus.ViewCreated) == 0)
+                {
+                }
+            }
+
             foreach (var (entity, transformData, physicData, timeData) in EntityManager.Foreach<TransformData, PhysicData, TimeData>())
             {
-                float deltaTime = timeData.timeScale * Game.deltaTime;
+                float deltaTime = /*timeData.timeScale * */Game.deltaTime;
 
-                transformData.lastPosition = transformData.position;
-                transformData.lastRotation = transformData.rotation;
+                //transformData.lastPosition = transformData.position;
+                //transformData.lastRotation = transformData.rotation;
 
                 //transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * deltaTime)).normalized;
-                transformData.position += physicData.velocity * deltaTime;
+                //transformData.position += physicData.velocity * deltaTime;
             }
         }
 

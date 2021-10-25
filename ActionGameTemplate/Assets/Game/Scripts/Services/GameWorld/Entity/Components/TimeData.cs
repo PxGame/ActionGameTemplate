@@ -24,8 +24,8 @@ namespace AGT
         public float renderDeltaTime;
         public float renderTimeStep;
 
-        public float timeScale;
-        public float nextTimeScale;
+        //public float timeScale;
+        //public float nextTimeScale;
 
         public void Reset()
         {
@@ -35,8 +35,8 @@ namespace AGT
             renderDeltaTime = 0f;
             renderTimeStep = 0f;
 
-            timeScale = 1f;
-            nextTimeScale = float.NaN;
+            //timeScale = 1f;
+            //nextTimeScale = float.NaN;
         }
     }
 }

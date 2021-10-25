@@ -33,6 +33,7 @@ namespace AGT
         public ModuleManager modules { get; private set; }
         public EntityManager entities { get; private set; }
         public ViewManager views { get; private set; }
+        public PhysicManager physics { get; private set; }
 
         public bool pause { get; set; } = false;
 
@@ -64,6 +65,7 @@ namespace AGT
             modules = new ModuleManager(); managers.Add(modules);
             entities = new EntityManager(); managers.Add(entities);
             views = new ViewManager(); managers.Add(views);
+            physics = new PhysicManager(); managers.Add(physics);
 
             foreach (var manager in managers)
             {

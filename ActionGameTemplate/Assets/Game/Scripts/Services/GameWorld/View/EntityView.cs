@@ -26,8 +26,8 @@ namespace AGT
 
         public virtual void OnViewUpdate(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)
         {
-            transform.position = Vector3.Lerp(transformData.lastPosition, transformData.position, timeData.renderTimeStep);
-            transform.rotation = Quaternion.Lerp(transformData.lastRotation, transformData.rotation, timeData.renderTimeStep);
+            //transform.position = Vector3.Lerp(transformData.lastPosition, transformData.position, timeData.renderTimeStep);
+            //transform.rotation = Quaternion.Lerp(transformData.lastRotation, transformData.rotation, timeData.renderTimeStep);
 
             foreach (var control in controls)
             {

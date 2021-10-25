@@ -20,8 +20,8 @@ namespace AGT
         public Vector3 position;
         public Quaternion rotation;
 
-        public Vector3 lastPosition;
-        public Quaternion lastRotation;
+        //public Vector3 lastPosition;
+        //public Quaternion lastRotation;
 
         public Matrix4x4 matrix => Matrix4x4.TRS(position, rotation, Vector3.one);
 
@@ -29,8 +29,8 @@ namespace AGT
         {
             position = Vector3.zero;
             rotation = Quaternion.identity;
-            lastPosition = Vector3.zero;
-            lastRotation = Quaternion.identity;
+            //lastPosition = Vector3.zero;
+            //lastRotation = Quaternion.identity;
         }
     }
 }

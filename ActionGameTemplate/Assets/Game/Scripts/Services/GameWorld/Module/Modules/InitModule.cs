@@ -31,13 +31,13 @@ namespace AGT
         {
             foreach (var (entity, timeData) in EntityManager.Foreach<TimeData>())
             {
-                if (!float.IsNaN(timeData.nextTimeScale))
-                {
-                    timeData.timeScale = timeData.nextTimeScale >= 0f ? timeData.nextTimeScale : 0f;
-                    timeData.nextTimeScale = float.NaN;
-                }
+                //if (!float.IsNaN(timeData.nextTimeScale))
+                //{
+                //    timeData.timeScale = timeData.nextTimeScale >= 0f ? timeData.nextTimeScale : 0f;
+                //    timeData.nextTimeScale = float.NaN;
+                //}
 
-                float deltaTime = Game.deltaTime * timeData.timeScale;
+                float deltaTime = Game.deltaTime/* * timeData.timeScale*/;
 
                 timeData.logicTimer += deltaTime;
                 timeData.renderTotalTime = (timeData.renderTotalTime - timeData.renderTimer) + deltaTime;
@@ -49,7 +49,7 @@ namespace AGT
         {
             foreach (var (entity, timeData) in EntityManager.Foreach<TimeData>())
             {
-                float deltaTime = Game.deltaTime * timeData.timeScale;
+                float deltaTime = Game.deltaTime/* * timeData.timeScale*/;
                 float nextRenderTimer = timeData.renderTimer + deltaTime;
                 if (nextRenderTimer > timeData.renderTotalTime)
                 {

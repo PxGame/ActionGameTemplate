@@ -40,8 +40,7 @@ namespace AGT
 
         private EntityView CreateEntityView(TransformData transformData, ViewData viewData)
         {
-            GameObject preObj = Resources.Load<GameObject>(viewData.resourcePath);
-            GameObject obj = GameObject.Instantiate(preObj);
+            GameObject obj = Game.resource.CreateGO(viewData.resourcePath);
             EntityView view = obj.GetComponent<EntityView>();
 
             view.transform.position = transformData.position;
@@ -54,7 +53,7 @@ namespace AGT
         {
             if (view != null)
             {
-                GameObject.Destroy(view.gameObject);
+                Game.resource.DestoryGO(view.gameObject);
             }
         }
 
