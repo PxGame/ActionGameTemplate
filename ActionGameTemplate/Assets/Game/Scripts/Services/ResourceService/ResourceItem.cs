@@ -18,9 +18,9 @@ namespace AGT
     public class ResourceItem : MonoBehaviour, IResourceItem
     {
         [SerializeField]
-        private string _poolTag;
+        private string _resourceTag;
 
-        public string poolTag => _poolTag;
+        public string poolTag => _resourceTag;
 
         public bool inPool { get; set; }
 

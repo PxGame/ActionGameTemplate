@@ -191,7 +191,7 @@ namespace AGT
                     entity.AddComponent<InputData>();
                     var tran = entity.AddComponent<TransformData>();
                     var view = entity.AddComponent<ViewData>();
-                    entity.AddComponent<PhysicData>();
+                    var physic = entity.AddComponent<PhysicData>();
                     entity.AddComponent<TimeData>();
 
                     Vector3 position = UnityEngine.Random.insideUnitSphere * 10;
@@ -199,7 +199,8 @@ namespace AGT
                     tran.position = position;
                     tran.rotation = Quaternion.identity;
 
-                    view.resourcePath = "Nordstrom";
+                    view.resourceTag = "Nordstrom";
+                    physic.resourceTag = "PhsyicBody";
                 }
             }
 

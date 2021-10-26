@@ -17,6 +17,7 @@ namespace AGT
     /// </summary>
     public class TimeData : IComponentData
     {
+        public int frameIndex;
         public float logicTimer;
 
         public float renderTotalTime;
@@ -29,6 +30,7 @@ namespace AGT
 
         public void Reset()
         {
+            frameIndex = 0;
             logicTimer = 0f;
             renderTimer = 0f;
             renderTotalTime = 0f;

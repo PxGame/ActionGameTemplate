@@ -123,4 +123,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df31f8f555b8f424bbd80296fb28c9c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _poolTag: RRR
+  _resourceTag: Cube

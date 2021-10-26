@@ -22,35 +22,52 @@ namespace AGT
         {
             //SuperLog.Log("PhysicModule Destory");
             DebugTool.RemoveGizmo(OnDebugGizmo);
+
+            Physics.autoSimulation = true;
         }
 
         public override void Initialize()
         {
             //SuperLog.Log("PhysicModule Initialize");
             DebugTool.AddGizmo(OnDebugGizmo);
+
+            Physics.autoSimulation = false;
         }
 
         public override void LogicUpdate()
         {
-            foreach (var (entity, viewData) in EntityManager.Foreach<PhysicData>())
+            foreach (var (entity, physicData) in EntityManager.Foreach<PhysicData>())
             {
                 if ((entity.status & EntityStatus.Destoryed) != 0)
                 {
+                    PhysicManager.Destory(entity);
                 }
-                else if ((entity.status & EntityStatus.ViewCreated) == 0)
+                else if ((entity.status & EntityStatus.PhysicCreated) == 0)
                 {
+                    PhysicManager.Create(entity);
                 }
             }
 
-            foreach (var (entity, transformData, physicData, timeData) in EntityManager.Foreach<TransformData, PhysicData, TimeData>())
+            foreach (var (entity, transformData, physicData) in EntityManager.Foreach<TransformData, PhysicData>())
             {
-                float deltaTime = /*timeData.timeScale * */Game.deltaTime;
+                EntityPhysic physic = PhysicManager.Get(entity.id);
+                if (physic == null) { continue; }
 
-                //transformData.lastPosition = transformData.position;
-                //transformData.lastRotation = transformData.rotation;
+                physic.rigid.position = transformData.position;
+                physic.rigid.rotation = transformData.rotation;
+                physic.rigid.velocity = physicData.velocity;
+            }
 
-                //transformData.rotation = (transformData.rotation * Quaternion.Euler(Vector3.one * 10 * deltaTime)).normalized;
-                //transformData.position += physicData.velocity * deltaTime;
+            Physics.Simulate(Game.deltaTime);
+
+            foreach (var (entity, transformData, physicData) in EntityManager.Foreach<TransformData, PhysicData>())
+            {
+                EntityPhysic physic = PhysicManager.Get(entity.id);
+                if (physic == null) { continue; }
+
+                transformData.position = physic.rigid.position;
+                transformData.rotation = physic.rigid.rotation;
+                physicData.velocity = physic.rigid.velocity;
             }
         }
 

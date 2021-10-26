@@ -34,6 +34,15 @@ namespace AGT
 
         public override void LogicUpdate()
         {
+            var input = InputService.GetPlayerActions();
+            if (input.Axis.IsPressed())
+            {
+                var axis = input.Axis.ReadValue<Vector2>();
+
+                var p = EntityManager.Get(1).GetComponent<PhysicData>();
+                p.velocity.x = axis.x * 2;
+                p.velocity.z = axis.y * 2;
+            }
         }
 
         public override void ViewUpdate()

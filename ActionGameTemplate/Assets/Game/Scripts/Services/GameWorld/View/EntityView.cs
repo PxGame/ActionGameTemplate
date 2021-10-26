@@ -19,15 +19,33 @@ namespace AGT
     {
         private List<IViewControl> controls = new List<IViewControl>();
 
+        private int lastFrameIndex = -1;
+        private Vector3 lastFramePosition;
+        private Quaternion lastFrameRotation;
+
         private void Awake()
         {
             GetComponents<IViewControl>(controls);
         }
 
+        private void OnEnable()
+        {
+            lastFrameIndex = -1;
+            lastFramePosition = transform.position;
+            lastFrameRotation = transform.rotation;
+        }
+
         public virtual void OnViewUpdate(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)
         {
-            //transform.position = Vector3.Lerp(transformData.lastPosition, transformData.position, timeData.renderTimeStep);
-            //transform.rotation = Quaternion.Lerp(transformData.lastRotation, transformData.rotation, timeData.renderTimeStep);
+            if (lastFrameIndex != timeData.frameIndex)
+            {
+                lastFrameIndex = timeData.frameIndex;
+                lastFramePosition = transform.position;
+                lastFrameRotation = transform.rotation;
+            }
+
+            transform.position = Vector3.Lerp(lastFramePosition, transformData.position, timeData.renderTimeStep);
+            transform.rotation = Quaternion.Lerp(lastFrameRotation, transformData.rotation, timeData.renderTimeStep);
 
             foreach (var control in controls)
             {

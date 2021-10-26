@@ -39,6 +39,7 @@ namespace AGT
 
                 float deltaTime = Game.deltaTime/* * timeData.timeScale*/;
 
+                timeData.frameIndex += 1;
                 timeData.logicTimer += deltaTime;
                 timeData.renderTotalTime = (timeData.renderTotalTime - timeData.renderTimer) + deltaTime;
                 timeData.renderTimer = 0f;

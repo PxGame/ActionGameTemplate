@@ -17,11 +17,13 @@ namespace AGT
     /// </summary>
     public class PhysicData : IComponentData
     {
+        public string resourceTag;
         public Vector3 velocity;
 
         public void Reset()
         {
             velocity = Vector3.zero;
+            resourceTag = string.Empty;
         }
     }
 }

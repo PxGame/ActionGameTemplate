@@ -17,11 +17,11 @@ namespace AGT
     /// </summary>
     public class ViewData : IComponentData
     {
-        public string resourcePath;
+        public string resourceTag;
 
         public void Reset()
         {
-            resourcePath = string.Empty;
+            resourceTag = string.Empty;
         }
     }
 }

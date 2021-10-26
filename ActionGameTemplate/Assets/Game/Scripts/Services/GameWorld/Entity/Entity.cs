@@ -20,6 +20,7 @@ namespace AGT
         Inited = 0b1,
         Destoryed = 0b10,
         ViewCreated = 0b100,
+        PhysicCreated = 0b1000,
 
         //扩展
 
