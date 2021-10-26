@@ -1,16 +1,16 @@
 [submodule "ActionGameTemplate/Packages/XMLib.ThirdParty"]
 	path = ActionGameTemplate/Packages/XMLib.ThirdParty
-	url = git@github.com:PxGame/XMLib.ThirdParty.git
+	url = https://github.com/PxGame/XMLib.ThirdParty.git
 	branch = dev
 [submodule "ActionGameTemplate/Packages/XMLib.Common"]
 	path = ActionGameTemplate/Packages/XMLib.Common
-	url = git@github.com:PxGame/XMLib.Common.git
+	url = https://github.com/PxGame/XMLib.Common.git
 	branch = dev
 [submodule "ActionGameTemplate/Packages/XMLib.Core"]
 	path = ActionGameTemplate/Packages/XMLib.Core
-	url = git@github.com:PxGame/XMLib.Core.git
+	url = https://github.com/PxGame/XMLib.Core.git
 	branch = dev
 [submodule "ActionGameTemplate/Packages/XMLib.AM"]
 	path = ActionGameTemplate/Packages/XMLib.AM
-	url = git@github.com:PxGame/XMLib.AM.git
+	url = https://github.com/PxGame/XMLib.AM.git
 	branch = dev
