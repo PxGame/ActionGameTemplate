@@ -106,6 +106,7 @@ namespace AGT
 
         private void OnGameWorldPage()
         {
+            pause = EditorGUILayout.Toggle("暂停游戏", pause);
             renderTimeScale = EditorGUILayout.Slider("渲染时间缩放", renderTimeScale, 0, 10);
             UnityEngine.Application.targetFrameRate = EditorGUILayout.IntSlider("帧数限制", UnityEngine.Application.targetFrameRate, 0, 144);
         }

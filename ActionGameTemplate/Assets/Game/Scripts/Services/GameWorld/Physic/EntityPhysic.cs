@@ -15,12 +15,23 @@ namespace AGT
     /// <summary>
     /// EntityPhysic
     /// </summary>
-    public class EntityPhysic : MonoBehaviour
+    public class EntityPhysic : MonoBehaviour, ISubPoolCallback
     {
+        public int entityId;
+
         public Rigidbody rigid => _rigid;
 
         [SerializeField]
         private Rigidbody _rigid;
+
+        public void OnPushPool()
+        {
+            entityId = EntityManager.NoneID;
+        }
+
+        public void OnPopPool()
+        {
+        }
 
 #if UNITY_EDITOR
 

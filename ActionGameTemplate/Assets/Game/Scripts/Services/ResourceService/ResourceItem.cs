@@ -15,6 +15,7 @@ namespace AGT
     /// <summary>
     /// ResourceItem
     /// </summary>
+    [DisallowMultipleComponent]
     public class ResourceItem : MonoBehaviour, IResourceItem
     {
         [SerializeField]
@@ -24,12 +25,41 @@ namespace AGT
 
         public bool inPool { get; set; }
 
+        private List<ISubPoolCallback> subPoolCallbacks = new List<ISubPoolCallback>();
+
+        public virtual void Awake()
+        {
+            GetComponents<ISubPoolCallback>(subPoolCallbacks);
+        }
+
         public virtual void OnPopPool()
         {
+            foreach (var callback in subPoolCallbacks)
+            {
+                callback.OnPopPool();
+            }
         }
 
         public virtual void OnPushPool()
         {
+            foreach (var callback in subPoolCallbacks)
+            {
+                callback.OnPushPool();
+            }
         }
+
+#if UNITY_EDITOR
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(_resourceTag))
+            {
+                _resourceTag = gameObject.name;
+            }
+        }
+
+#endif
     }
+
+    public interface ISubPoolCallback : IPoolCallback { }
 }

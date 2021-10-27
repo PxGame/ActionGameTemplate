@@ -15,24 +15,31 @@ namespace AGT
     /// <summary>
     /// EntityView
     /// </summary>
-    public class EntityView : MonoBehaviour
+    public class EntityView : MonoBehaviour, ISubPoolCallback
     {
+        public int entityId;
+
         private List<IViewControl> controls = new List<IViewControl>();
 
         private int lastFrameIndex = -1;
-        private Vector3 lastFramePosition;
-        private Quaternion lastFrameRotation;
+        private Vector3 lastFramePosition = Vector3.zero;
+        private Quaternion lastFrameRotation = Quaternion.identity;
 
         private void Awake()
         {
             GetComponents<IViewControl>(controls);
         }
 
-        private void OnEnable()
+        public void OnPushPool()
         {
+            entityId = EntityManager.NoneID;
             lastFrameIndex = -1;
-            lastFramePosition = transform.position;
-            lastFrameRotation = transform.rotation;
+            lastFramePosition = Vector3.zero;
+            lastFrameRotation = Quaternion.identity;
+        }
+
+        public void OnPopPool()
+        {
         }
 
         public virtual void OnViewUpdate(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)

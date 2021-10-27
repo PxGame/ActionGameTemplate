@@ -38,11 +38,12 @@ namespace AGT
             return entity2view.TryGetValue(entityId, out EntityView view) ? view : null;
         }
 
-        private EntityView CreateEntityView(TransformData transformData, ViewData viewData)
+        private EntityView CreateEntityView(Entity entity, TransformData transformData, ViewData viewData)
         {
             GameObject obj = Game.resource.CreateGO(viewData.resourceTag);
             EntityView view = obj.GetComponent<EntityView>();
 
+            view.entityId = entity.id;
             view.transform.position = transformData.position;
             view.transform.rotation = transformData.rotation;
 
@@ -65,8 +66,8 @@ namespace AGT
             TransformData transformData = entity.GetComponent<TransformData>();
             if (viewData == null || transformData == null) { return; }
 
-            EntityView view = CreateEntityView(transformData, viewData);
-            entity2view.Add(entity.id, view);
+            EntityView view = CreateEntityView(entity, transformData, viewData);
+            entity2view.Add(view.entityId, view);
             entity.status |= EntityStatus.ViewCreated;
         }
 

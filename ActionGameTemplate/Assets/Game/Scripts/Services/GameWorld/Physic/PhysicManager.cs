@@ -46,8 +46,8 @@ namespace AGT
             TransformData transformData = entity.GetComponent<TransformData>();
             if (physicData == null || transformData == null) { return; }
 
-            EntityPhysic physic = CreateEntityPhysic(transformData, physicData);
-            entity2physic.Add(entity.id, physic);
+            EntityPhysic physic = CreateEntityPhysic(entity, transformData, physicData);
+            entity2physic.Add(physic.entityId, physic);
             entity.status |= EntityStatus.PhysicCreated;
         }
 
@@ -62,11 +62,12 @@ namespace AGT
             DestoryEntityPhysic(physic);
         }
 
-        private EntityPhysic CreateEntityPhysic(TransformData transformData, PhysicData physicData)
+        private EntityPhysic CreateEntityPhysic(Entity entity, TransformData transformData, PhysicData physicData)
         {
             GameObject obj = Game.resource.CreateGO(physicData.resourceTag);
             EntityPhysic physic = obj.GetComponent<EntityPhysic>();
 
+            physic.entityId = entity.id;
             physic.transform.position = transformData.position;
             physic.transform.rotation = transformData.rotation;
 
