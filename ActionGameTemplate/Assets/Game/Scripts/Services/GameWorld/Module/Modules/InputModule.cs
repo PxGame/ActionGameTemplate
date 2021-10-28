@@ -22,6 +22,7 @@ using UnityEditor;
 
 namespace AGT
 {
+    [Flags]
     public enum InputStatus
     {
         None = 0b0,
@@ -66,14 +67,32 @@ namespace AGT
 
         public override void LogicUpdate()
         {
-            Entity entity = GameWorld.GetPlayerEntity();
-            if (entity == null) { return; }
-
-            InputData input = entity.GetOrAddComponent<InputData>();
         }
 
         public override void ViewUpdate()
         {
+            Entity entity = GameWorld.GetPlayerEntity();
+            if (entity == null) { return; }
+
+            InputData input = entity.GetOrAddComponent<InputData>();
+
+            if (isJump)
+            {
+                input.status |= InputStatus.Jump;
+            }
+            if (isDash)
+            {
+                input.status |= InputStatus.Dash;
+            }
+            if (isAttack)
+            {
+                input.status |= InputStatus.Attack;
+            }
+            if (isAxis)
+            {
+                input.status |= InputStatus.Axis;
+                input.SetAxisFromDir(axisValue);
+            }
         }
 
         #region Debug GUI

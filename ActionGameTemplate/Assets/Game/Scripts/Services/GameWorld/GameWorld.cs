@@ -34,6 +34,7 @@ namespace AGT
         public EntityManager entities { get; private set; }
         public ViewManager views { get; private set; }
         public PhysicManager physics { get; private set; }
+        public ActionMachineManager actionMachine { get; private set; }
 
         public bool pause { get; set; } = false;
 
@@ -66,6 +67,7 @@ namespace AGT
             entities = new EntityManager(); managers.Add(entities);
             views = new ViewManager(); managers.Add(views);
             physics = new PhysicManager(); managers.Add(physics);
+            actionMachine = new ActionMachineManager(); managers.Add(actionMachine);
 
             foreach (var manager in managers)
             {

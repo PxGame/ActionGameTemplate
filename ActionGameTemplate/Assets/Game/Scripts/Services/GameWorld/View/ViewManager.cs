@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XMLib;
+using XMLib.AM;
 
 namespace AGT
 {
@@ -69,6 +70,8 @@ namespace AGT
             EntityView view = CreateEntityView(entity, transformData, viewData);
             entity2view.Add(view.entityId, view);
             entity.status |= EntityStatus.ViewCreated;
+
+            view.OnViewCreate(entity);
         }
 
         public void Destory(Entity entity)
@@ -78,7 +81,11 @@ namespace AGT
             entity.status &= ~EntityStatus.ViewCreated;
 
             EntityView view = entity2view[entity.id];
+
+            view.OnViewDestory(entity);
+
             entity2view.Remove(entity.id);
+
             DestoryEntityView(view);
         }
 
@@ -88,6 +95,7 @@ namespace AGT
             {
                 return;
             }
+
             view.OnViewUpdate(entity, transformData, viewData, timeData);
         }
     }

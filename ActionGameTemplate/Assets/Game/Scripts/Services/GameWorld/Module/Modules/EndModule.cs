@@ -30,6 +30,11 @@ namespace AGT
         public override void LogicUpdate()
         {
             EntityManager.ApplyDestory();
+
+            foreach (var (entity, inputData) in EntityManager.Foreach<InputData>())
+            {//重置输入
+                inputData.Reset();
+            }
         }
 
         public override void ViewUpdate()

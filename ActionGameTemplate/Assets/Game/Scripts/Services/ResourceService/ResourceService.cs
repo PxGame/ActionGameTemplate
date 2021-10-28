@@ -13,6 +13,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using XMLib;
 
+using XMLib.AM;
+
 namespace AGT
 {
     /// <summary>
@@ -24,6 +26,7 @@ namespace AGT
         private GameObject _poolRoot;
 
         private const string ResourceDataPath = "Data/resources";
+        private const string MachineConfigPath = "MachineConfig";
         private ResourceData _data;
 
         public IEnumerator OnServiceInitialize()
@@ -32,9 +35,15 @@ namespace AGT
             GameObject.DontDestroyOnLoad(_poolRoot);
 
             TextAsset asset = Resources.Load<TextAsset>(ResourceDataPath);
-            _data = JsonConvert.DeserializeObject<ResourceData>(asset.text);
+            _data = DataUtility.FromJson<ResourceData>(asset.text);
 
             yield break;
+        }
+
+        public MachineConfig LoadMachineConfig(string configName)
+        {
+            TextAsset asset = Resources.Load<TextAsset>($"{MachineConfigPath}/{configName}");
+            return DataUtility.FromJson<MachineConfig>(asset.text);
         }
 
         public GameObject FindGO(string tag)

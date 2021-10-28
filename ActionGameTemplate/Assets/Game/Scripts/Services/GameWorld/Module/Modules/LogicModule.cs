@@ -17,8 +17,6 @@ namespace AGT
     /// </summary>
     public class LogicModule : IModule
     {
-        public ActionMachineProcessor am { get; private set; }
-
         public override void Destory()
         {
             //SuperLog.Log("LogicModule Destory");
@@ -28,20 +26,14 @@ namespace AGT
         public override void Initialize()
         {
             //SuperLog.Log("LogicModule Initialize");
-            am = new ActionMachineProcessor();
             DebugTool.AddGizmo(OnGizmo);
         }
 
         public override void LogicUpdate()
         {
-            var input = InputService.GetPlayerActions();
-            if (input.Axis.IsPressed())
+            foreach (var (entity, actionMachineData) in EntityManager.Foreach<ActionMachineData>())
             {
-                var axis = input.Axis.ReadValue<Vector2>();
-
-                var p = EntityManager.Get(1).GetComponent<PhysicData>();
-                p.velocity.x = axis.x * 2;
-                p.velocity.z = axis.y * 2;
+                ActionMachineManager.Update(entity, actionMachineData, Game.deltaTime);
             }
         }
 

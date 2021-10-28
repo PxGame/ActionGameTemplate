@@ -18,5 +18,9 @@ namespace AGT
     public interface IViewControl
     {
         void OnViewUpdate(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData);
+
+        void OnViewCreate(Entity entity);
+
+        void OnViewDestory(Entity entity);
     }
 }

@@ -42,6 +42,22 @@ namespace AGT
         {
         }
 
+        public virtual void OnViewCreate(Entity entity)
+        {
+            foreach (var control in controls)
+            {
+                control.OnViewCreate(entity);
+            }
+        }
+
+        public virtual void OnViewDestory(Entity entity)
+        {
+            foreach (var control in controls)
+            {
+                control.OnViewDestory(entity);
+            }
+        }
+
         public virtual void OnViewUpdate(Entity entity, TransformData transformData, ViewData viewData, TimeData timeData)
         {
             if (lastFrameIndex != timeData.frameIndex)

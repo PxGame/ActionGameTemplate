@@ -186,13 +186,16 @@ namespace AGT
                 for (int i = 0; i < debugCreateCnt; i++)
                 {
                     Entity entity = Create();
-                    entity.AddComponent<TagData>();
-                    entity.AddComponent<ActionMachineData>();
                     entity.AddComponent<InputData>();
+                    entity.AddComponent<TimeData>();
+
+                    var tag = entity.AddComponent<TagData>();
                     var tran = entity.AddComponent<TransformData>();
                     var view = entity.AddComponent<ViewData>();
                     var physic = entity.AddComponent<PhysicData>();
-                    entity.AddComponent<TimeData>();
+                    var am = entity.AddComponent<ActionMachineData>();
+
+                    tag.value = EntityTag.Player;
 
                     Vector3 position = UnityEngine.Random.insideUnitSphere * 10;
                     position.y = 0f;
@@ -201,6 +204,8 @@ namespace AGT
 
                     view.resourceTag = "Nordstrom";
                     physic.resourceTag = "PhsyicBody";
+
+                    am.configName = "MachineConfig";
                 }
             }
 

@@ -23,6 +23,7 @@ namespace AGT
         public EntityManager EntityManager => GameWorld.entities;
         public ViewManager ViewManager => GameWorld.views;
         public PhysicManager PhysicManager => GameWorld.physics;
+        public ActionMachineManager ActionMachineManager => GameWorld.actionMachine;
         public InputService InputService => Game.input;
 
         public abstract void Initialize();
