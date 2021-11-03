@@ -50,7 +50,6 @@ namespace AGT
 
                 Vector3 velocity = input.GetDir() * config.moveSpeed;
 
-                Debug.Log($"{input.GetDir()} => {velocity}");
                 physic.velocity.x = velocity.x;
                 physic.velocity.z = velocity.z;
 

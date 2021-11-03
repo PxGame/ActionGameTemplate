@@ -34,7 +34,9 @@ namespace AGT
             serviceTypes.Add((typeof(AudioService), t => Game.audio = t as AudioService));
             serviceTypes.Add((typeof(UIService), t => Game.ui = t as UIService));
             serviceTypes.Add((typeof(SceneService), t => Game.scene = t as SceneService));
-            serviceTypes.Add((typeof(GameWorld), t => Game.gw = t as GameWorld));
+
+            target.Singleton<GameWorld>().OnResolving((b, obj) => Game.gw = obj as GameWorld).OnRelease((b, obj) => Game.gw = null);
+            target.Bind<GameScene>();
         }
 
         public void OnInitialized()

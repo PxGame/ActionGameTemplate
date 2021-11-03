@@ -23,7 +23,7 @@ namespace AGT
     /// <summary>
     /// GameWorld
     /// </summary>
-    public class GameWorld : IMonoUpdate, IMonoStart, IMonoDestroy
+    public class GameWorld : IMonoUpdate, IMonoStart, IMonoDestroy, IWorld
     {
         public static float logicDeltaTime => 1f / 30f;
         public static float renderDeltaTime => Time.deltaTime * renderTimeScale;
@@ -40,6 +40,20 @@ namespace AGT
 
         private List<IManager> managers = new List<IManager>();
 
+        public SuperLogHandler LogHandler = SuperLogHandler.Create("GameWorld");
+
+        public IEnumerator Initialize()
+        {
+            LogHandler.Log("Initialize");
+            yield break;
+        }
+
+        public IEnumerator UnInitialize()
+        {
+            LogHandler.Log("UnInitialize");
+            yield break;
+        }
+
         public void OnMonoUpdate()
         {
             if (pause) { return; }
@@ -52,10 +66,12 @@ namespace AGT
             DestoryManager();
 
             DebugTool.RemovePage("游戏世界");
+            LogHandler.Log("OnMonoDestroy");
         }
 
         public void OnMonoStart()
         {
+            LogHandler.Log("OnMonoStart");
             renderTimeScale = 1f;
             InitializeManager();
             DebugTool.AddPage("游戏世界", OnGameWorldPage);
