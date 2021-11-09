@@ -1,6 +1,13 @@
 :root {
-  --resize-handle__normal-color:rgba(255, 255, 255, 0.25);
+  --resize-handle__normal-color:rgba(255, 255, 255, 0.1);
   --resize-handle__hover-color:rgba(255, 255, 255, 1);
+}
+
+.resize-test{
+    border-color:rgba(245,255,150,0.5);
+    border-width:1;
+    margin:5px;
+    padding:5px;
 }
 
 .resize-handle{
