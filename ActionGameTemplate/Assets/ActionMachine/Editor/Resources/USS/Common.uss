@@ -1,0 +1,44 @@
+:root {
+  --resize-handle__normal-color:rgba(255, 255, 255, 0.25);
+  --resize-handle__hover-color:rgba(255, 255, 255, 1);
+}
+
+.resize-handle{
+    background-color: var(--resize-handle__normal-color);
+}
+
+.resize-handle:hover{
+    background-color: var(--resize-handle__hover-color);
+}
+
+.resize-handle__right-top {
+    cursor: resize-up-right;
+}
+
+.resize-handle__right-bottom {
+    cursor: resize-up-left;
+}
+
+.resize-handle__left-top  {
+    cursor: resize-up-left;
+}
+
+.resize-handle__left-bottom  {
+    cursor: resize-up-right;
+}
+
+.resize-handle__left {
+    cursor: resize-horizontal;
+}
+
+.resize-handle__right {
+    cursor: resize-horizontal;
+}
+
+.resize-handle__top {
+    cursor: resize-vertical;
+}
+
+.resize-handle__bottom {
+    cursor: resize-vertical;
+}
