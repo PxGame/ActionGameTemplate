@@ -1,0 +1,16 @@
+.panel__background {
+    border-left-color: rgb(89, 89, 89);
+    border-right-color: rgb(89, 89, 89);
+    border-top-color: rgb(89, 89, 89);
+    border-bottom-color: rgb(89, 89, 89);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    background-color: rgb(56, 56, 56);
+    overflow: hidden;
+}
+
+.panel__header {
+    background-color: rgb(37, 37, 37);
+}

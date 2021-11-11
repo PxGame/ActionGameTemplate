@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <uie:Toolbar style="flex-grow: 1;">
+        <uie:ToolbarMenu display-tooltip-when-elided="true" text="File" style="width: 79px;" />
+        <uie:ToolbarSpacer style="flex-grow: 1;" />
+        <uie:ObjectField allow-scene-objects="false" type="XMLib.AM.AcionMachinePackage, XMLib.ActionMachine" style="justify-content: flex-start; flex-direction: row; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; width: 160px;" />
+    </uie:Toolbar>
+</ui:UXML>

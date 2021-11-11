@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="/Assets/ActionMachine/Editor/Resources/USS/PanelElement.uss" />
+    <ui:VisualElement name="background" class="panel__background" style="flex-grow: 1; overflow: hidden;">
+        <ui:VisualElement name="header" class="panel__header" style="flex-shrink: 0; height: 20px; flex-direction: row; overflow: hidden;">
+            <ui:Label text="标题" display-tooltip-when-elided="true" name="title" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; padding-left: 5px; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; -unity-text-align: middle-left;" />
+            <ui:Label display-tooltip-when-elided="true" name="sub-title" style="border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; padding-left: 5px; padding-right: 0; padding-top: 0; padding-bottom: 0; flex-direction: row; -unity-text-align: middle-left; font-size: 10px; color: rgb(156, 156, 156);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="body" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

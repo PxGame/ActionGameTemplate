@@ -1,0 +1,18 @@
+{
+    "name": "XMLib.ActionMachine.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e1894d4f9453c464d99106dc7ec1d03c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
