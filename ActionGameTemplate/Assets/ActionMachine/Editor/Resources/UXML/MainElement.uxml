@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement style="height: 20px;">
+        <XMLib.AM.MenuElement name="menu" />
+    </ui:VisualElement>
+    <ui:VisualElement name="panel-container" style="flex-direction: row; flex-grow: 1; opacity: 1;">
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
+                <ui:VisualElement style="width: 150px;">
+                    <XMLib.AM.StatePanel name="panel-state" style="flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1;">
+                    <XMLib.AM.GraphPanel name="panel-graph" style="flex-grow: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="height: 300px;">
+                <XMLib.AM.TimelinePanel name="panel-timeline" style="flex-grow: 1;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="width: 300px;">
+            <XMLib.AM.PropertyPanel name="panel-property" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

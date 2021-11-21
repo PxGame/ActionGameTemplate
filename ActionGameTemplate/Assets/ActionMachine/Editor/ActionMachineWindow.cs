@@ -5,10 +5,13 @@
  * 创建时间: 2021/11/9 21:07:07
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 namespace XMLib.AM
 {
@@ -17,17 +20,30 @@ namespace XMLib.AM
     /// </summary>
     public class ActionMachineWindow : EditorWindow
     {
-        [MenuItem("XMLib/Action Machine")]
-        protected static void ShowMenu()
+        public MainElement main { get; protected set; }
+
+        private void Awake()
         {
-            var win = GetWindow<ActionMachineWindow>();
-            win.Show();
+            ActionMachineManager.Reset();
+        }
+
+        private void OnEnable()
+        {
         }
 
         protected void CreateGUI()
         {
-            var uxml = ResourceUtility.LoadUXML("ActionMachineWindow");
-            uxml.CloneTree(rootVisualElement);
+            main = new MainElement();
+            rootVisualElement.Add(main);
+            main.Initialize();
+        }
+
+        private void OnDisable()
+        {
+        }
+
+        private void OnDestroy()
+        {
         }
     }
 }

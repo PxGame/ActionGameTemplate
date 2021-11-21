@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(91, 91, 91); border-right-color: rgb(91, 91, 91); border-top-color: rgb(91, 91, 91); border-bottom-color: rgb(91, 91, 91); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
+        <ui:Label text="工具" display-tooltip-when-elided="true" />
+        <uie:PropertyField binding-path="actionMachineData" name="text-asset" label="配置文件" style="height: auto;" />
+        <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: stretch; height: 31px;">
+            <ui:Button text="读取" display-tooltip-when-elided="true" name="btn-read" style="flex-shrink: 1; flex-grow: 1;" />
+            <ui:Button text="写入" display-tooltip-when-elided="true" name="btn-write" style="flex-shrink: 1; flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <uie:PropertyField binding-path="data" style="height: auto;" />
+</ui:UXML>

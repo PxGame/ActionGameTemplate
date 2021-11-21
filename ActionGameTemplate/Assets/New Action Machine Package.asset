@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8ccfd27c1947d41892cd77e78b3f50, type: 3}
+  m_Name: New Action Machine Package
+  m_EditorClassIdentifier: 
+  actionMachineData: {fileID: 4900000, guid: fb7d51d72ac890749a5be640889fcbb8, type: 3}
+  data:
+    defaultStateName: Default State Name
+    states:
+    - id: 0
+    - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: StateData, ns: XMLib.AM, asm: XMLib.ActionMachine}
+      data:
+        setting:
+          stateName: State(65)
+          animName: 
+          stateLoopCnt: 0
+          nextStateName: 
+        tracks:
+        - name: dsad
+        - name: asd
+        - name: dasdasdas
+        - name: dasdasdas
+        - name: dasdasdas
+        - name: dasdasdas
+        - name: dasdasdas
+        - name: dasdasdas
+        - name: 2222
+        - name: 11111
+    00000001:
+      type: {class: StateData, ns: XMLib.AM, asm: XMLib.ActionMachine}
+      data:
+        setting:
+          stateName: State(73)
+          animName: 
+          stateLoopCnt: 0
+          nextStateName: 
+        tracks: []

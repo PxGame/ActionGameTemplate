@@ -5,8 +5,10 @@
  * 创建时间: 2021/11/11 21:41:26
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,25 +17,31 @@ namespace XMLib.AM
     /// <summary>
     /// GraphPanel
     /// </summary>
-    public class GraphPanel : VisualElement
+    public class GraphPanel : PanelElement
     {
-        public GraphPanel()
+        private VisualElement _graphViewRoot;
+        private ActionGraphView _graphView;
+
+        public override string uxmlPath => "Panel/GraphPanel";
+
+        public GraphPanel() : base()
         {
-            var uxml = ResourceUtility.LoadUXML("GraphPanel");
-            uxml.CloneTree(this);
+            _graphViewRoot = this.Q("graph-view-root");
+
+            _graphView = new ActionGraphView();
+            _graphViewRoot.Add(_graphView);
+            _graphView.StretchToParentSize();
         }
 
-        public new class UxmlFactory : UxmlFactory<GraphPanel, UxmlTraits>
+        public new class UxmlFactory : PanelElement.UxmlFactory<GraphPanel, UxmlTraits>
         {
         }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits
+        public new class UxmlTraits : PanelElement.UxmlTraits
         {
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-
-                var graphPanel = ve as GraphPanel;
             }
         }
     }

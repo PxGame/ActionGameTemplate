@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(200, 112, 112); flex-direction: row; overflow: hidden; display: flex;">
+        <ui:VisualElement style="width: 177px; background-color: rgb(255, 131, 131); flex-shrink: 0;">
+            <ui:VisualElement name="toolbar-top-container" style="flex-shrink: 0; background-color: rgb(146, 229, 72); height: 50px;" />
+            <ui:VisualElement name="track-header-container" style="flex-grow: 1; background-color: rgb(231, 201, 151); overflow: hidden; visibility: visible;">
+                <ui:VisualElement name="track-header-content" style="background-color: rgb(213, 203, 255); height: 237px; width: auto; flex-shrink: 0;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="toolbar-bottom-container" style="flex-shrink: 0; height: 13px; background-color: rgb(242, 255, 117);" />
+        </ui:VisualElement>
+        <ui:VisualElement style="width: auto; flex-grow: 1; background-color: rgb(255, 158, 158); flex-direction: row;">
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:VisualElement style="height: auto; width: auto; flex-grow: 1; padding-right: 0; margin-right: 0; background-color: rgb(166, 210, 243); padding-bottom: 0; padding-left: 0; padding-top: 0; margin-bottom: 0;">
+                    <ui:VisualElement name="tick-container" style="height: 50px; background-color: rgb(229, 229, 229); overflow: hidden; flex-shrink: 0;" />
+                    <ui:VisualElement name="track-body-container" style="flex-grow: 1; background-color: rgb(117, 231, 255); overflow: hidden; align-items: flex-start;">
+                        <ui:VisualElement name="track-body-content" style="height: 273px; width: 499px; background-color: rgb(249, 232, 250); flex-shrink: 0; left: 0; top: 0;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement style="height: 13px; flex-shrink: 0;">
+                    <ui:Scroller high-value="100" direction="Horizontal" value="42" name="horizontal-scroller" style="flex-grow: 1;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement style="background-color: rgb(198, 83, 255); width: 13px; flex-shrink: 0;">
+                <ui:VisualElement style="height: 50px;" />
+                <ui:VisualElement style="flex-grow: 1; background-color: rgb(248, 88, 88);">
+                    <ui:Scroller high-value="100" direction="Vertical" value="50" name="vertical-scroller" style="flex-grow: 1;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="height: 14px; background-color: rgb(107, 49, 255);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

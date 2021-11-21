@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,25 +16,32 @@ namespace XMLib.AM
     /// <summary>
     /// TimelinePanel
     /// </summary>
-    public class TimelinePanel : VisualElement
+    public class TimelinePanel : BindablePanelElement
     {
-        public TimelinePanel()
+        public override string uxmlPath => "Panel/TimelinePanel";
+        private Timeline _timeline;
+
+        public TimelinePanel() : base()
         {
-            var uxml = ResourceUtility.LoadUXML("TimelinePanel");
-            uxml.CloneTree(this);
+            _timeline = this.Q<Timeline>("timeline");
         }
 
-        public new class UxmlFactory : UxmlFactory<TimelinePanel, UxmlTraits>
+        protected override void OnPropertyChanged()
+        {
+            base.OnPropertyChanged();
+
+            _timeline.Inspect(property);
+        }
+
+        public new class UxmlFactory : PanelElement.UxmlFactory<TimelinePanel, UxmlTraits>
         {
         }
 
-        public new class UxmlTraits : VisualElement.UxmlTraits
+        public new class UxmlTraits : PanelElement.UxmlTraits
         {
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-
-                var timelinePanel = ve as TimelinePanel;
             }
         }
     }

@@ -17,25 +17,33 @@ namespace XMLib.AM
     /// <summary>
     /// PanelElement
     /// </summary>
-    public class PanelElement : VisualElement
+    public abstract class PanelElement : BaseElement
     {
-        public override VisualElement contentContainer => _body;
+        public abstract string uxmlPath { get; }
 
-        protected VisualElement _body;
-        protected Label _title;
+        public override VisualElement contentContainer => _module?.contentContainer;
 
-        public string titleText { get => _title.text; set => _title.text = value; }
+        protected ModuleElement _module;
+        public string titleText => _module?.titleText;
 
         public PanelElement()
         {
-            var uxml = ResourceUtility.LoadUXML("PanelElement");
+            var uxml = ResourceUtility.LoadUXML(uxmlPath);
             uxml.CloneTree(this);
 
-            _body = this.Q("body");
-            _title = this.Q<Label>("title");
+            _module = this.Q<ModuleElement>("module");
+
+            this.AddManipulator(new PanelManipulator());
         }
 
-        public new class UxmlFactory : UxmlFactory<PanelElement, UxmlTraits>
+        protected override void OnInit(InitEvent evt)
+        {
+            base.OnInit(evt);
+        }
+
+        public class UxmlFactory<T, D> : UnityEngine.UIElements.UxmlFactory<T, D>
+            where T : PanelElement, new()
+            where D : UxmlTraits, new()
         {
         }
 
@@ -46,9 +54,6 @@ namespace XMLib.AM
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
                 base.Init(ve, bag, cc);
-
-                var panelElement = ve as PanelElement;
-                panelElement.titleText = _title.GetValueFromBag(bag, cc);
             }
         }
     }
