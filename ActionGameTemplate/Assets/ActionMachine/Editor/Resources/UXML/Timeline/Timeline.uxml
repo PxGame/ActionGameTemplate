@@ -10,7 +10,9 @@
         <ui:VisualElement style="width: auto; flex-grow: 1; background-color: rgb(255, 158, 158); flex-direction: row;">
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:VisualElement style="height: auto; width: auto; flex-grow: 1; padding-right: 0; margin-right: 0; background-color: rgb(166, 210, 243); padding-bottom: 0; padding-left: 0; padding-top: 0; margin-bottom: 0;">
-                    <ui:VisualElement name="tick-container" style="height: 50px; background-color: rgb(229, 229, 229); overflow: hidden; flex-shrink: 0;" />
+                    <ui:VisualElement name="tick-container" style="height: 50px; background-color: rgb(229, 229, 229); overflow: hidden; flex-shrink: 0;">
+                        <XMLib.AM.TickDisplayElement style="flex-grow: 1;" />
+                    </ui:VisualElement>
                     <ui:VisualElement name="track-body-container" style="flex-grow: 1; background-color: rgb(117, 231, 255); overflow: hidden; align-items: flex-start;">
                         <ui:VisualElement name="track-body-content" style="height: 273px; width: 499px; background-color: rgb(249, 232, 250); flex-shrink: 0; left: 0; top: 0;" />
                     </ui:VisualElement>

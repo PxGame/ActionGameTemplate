@@ -39,6 +39,12 @@ namespace XMLib.AM
     /// </summary>
     public static class EditorTool
     {
+        public static void ApplyWireMaterial()
+        {
+            var method = typeof(HandleUtility).GetMethod("ApplyWireMaterial", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static, null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
+            method.Invoke(null, new object[] { });
+        }
+
         public static void IncrementVersion(this VisualElement ve, VersionChangeType changeType)
         {
             var method = typeof(VisualElement).GetMethod("IncrementVersion", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
