@@ -5,6 +5,7 @@
  * 创建时间: 2021/11/11 21:41:02
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -16,7 +17,7 @@ namespace XMLib.AM
     /// <summary>
     /// TimelinePanel
     /// </summary>
-    public class TimelinePanel : BindablePanelElement
+    public class TimelinePanel : PanelElement
     {
         public override string uxmlPath => "Panel/TimelinePanel";
         private Timeline _timeline;
@@ -24,13 +25,6 @@ namespace XMLib.AM
         public TimelinePanel() : base()
         {
             _timeline = this.Q<Timeline>("timeline");
-        }
-
-        protected override void OnPropertyChanged()
-        {
-            base.OnPropertyChanged();
-
-            _timeline.Inspect(property);
         }
 
         public new class UxmlFactory : PanelElement.UxmlFactory<TimelinePanel, UxmlTraits>

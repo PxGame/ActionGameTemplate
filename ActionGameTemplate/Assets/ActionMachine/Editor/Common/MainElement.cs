@@ -28,40 +28,34 @@ namespace XMLib.AM
 
         public MainElement()
         {
-            var uxml = ResourceUtility.LoadUXML("MainElement");
+            var uxml = EditorTool.LoadUXML("MainElement");
             uxml.CloneTree(this);
 
             this.StretchToParentSize();
             this.AddManipulator(new MainManipulator());
 
             panelContainer = this.Q("panel-container");
-            panelContainer.visible = false;
-            panelContainer.SetEnabled(false);
 
             menu = this.Q<MenuElement>("menu");
             state = this.Q<StatePanel>("panel-state");
             property = this.Q<PropertyPanel>("panel-property");
             timeline = this.Q<TimelinePanel>("panel-timeline");
             graph = this.Q<GraphPanel>("panel-graph");
+
+            ShowPanel(false);
+
+            ActionMachineManager.data.onPackageChanged += OnPackageChanged;
         }
 
-        public void Initialize()
+        public void ShowPanel(bool show)
         {
-            var panels = this.Query<BaseElement>();
-            panels.ForEach(t =>
-            {
-                using (var evt = InitEvent.GetPooled(t, this))
-                {
-                    t.SendEvent(evt);
-                }
-            });
+            panelContainer.style.visibility = show ? Visibility.Visible : Visibility.Hidden;
+            panelContainer.SetEnabled(show);
         }
 
-        public void OnPackageChanged(ActionMachinePackage package)
+        public void OnPackageChanged()
         {
-            bool hasData = package != null;
-            panelContainer.SetEnabled(hasData);
-            panelContainer.visible = hasData;
+            ShowPanel(ActionMachineManager.data.package != null);
         }
     }
 }

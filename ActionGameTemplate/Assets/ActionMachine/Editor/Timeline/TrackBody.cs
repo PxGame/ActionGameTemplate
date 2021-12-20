@@ -24,7 +24,7 @@ namespace XMLib.AM
 
         public TrackBody()
         {
-            var uxml = ResourceUtility.LoadUXML("Timeline/TrackBody");
+            var uxml = EditorTool.LoadUXML("Timeline/TrackBody");
             uxml.CloneTree(this);
 
             _name = this.Q<Label>("name");

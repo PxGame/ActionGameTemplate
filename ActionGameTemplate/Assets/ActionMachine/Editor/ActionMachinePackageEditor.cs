@@ -11,6 +11,8 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Linq;
+using System;
 
 namespace XMLib.AM
 {
@@ -25,8 +27,7 @@ namespace XMLib.AM
         public override VisualElement CreateInspectorGUI()
         {
             rootElement = new VisualElement();
-
-            var uxml = ResourceUtility.LoadUXML("ActionMachineEditorData");
+            var uxml = EditorTool.LoadUXML("ActionMachineEditorData");
             uxml.CloneTree(rootElement);
             rootElement.Bind(serializedObject);
 
@@ -48,7 +49,7 @@ namespace XMLib.AM
                 return;
             }
 
-            data.data = ActionMachineManager.inst.ReadData(data.actionMachineData);
+            data.data = EditorTool.ReadData(data.actionMachineData);
             serializedObject.Update();
             rootElement.MarkDirtyRepaint();
         }
@@ -63,7 +64,7 @@ namespace XMLib.AM
                 return;
             }
 
-            ActionMachineManager.inst.WriteData(data.data, data.actionMachineData);
+            EditorTool.WriteData(data.data, data.actionMachineData);
         }
     }
 }

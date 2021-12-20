@@ -23,18 +23,13 @@ namespace XMLib.AM
 
         public MenuElement()
         {
-            var uxml = ResourceUtility.LoadUXML("MenuElement");
+            var uxml = EditorTool.LoadUXML("MenuElement");
             uxml.CloneTree(this);
-        }
-
-        protected override void OnInit(InitEvent evt)
-        {
-            base.OnInit(evt);
 
             actionMachineAsset = this.Q<ObjectField>("actionmachine-asset");
             actionMachineAsset.RegisterValueChangedCallback(t =>
             {
-                ActionMachineManager.inst.source = t.newValue as ActionMachinePackage;
+                ActionMachineManager.data.SetPackage(t.newValue as ActionMachinePackage);
             });
         }
 

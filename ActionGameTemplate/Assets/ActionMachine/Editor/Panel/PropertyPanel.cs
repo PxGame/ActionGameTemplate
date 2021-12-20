@@ -18,15 +18,25 @@ namespace XMLib.AM
     /// <summary>
     /// PropertyPanel
     /// </summary>
-    public class PropertyPanel : BindablePanelElement
+    public class PropertyPanel : PanelElement
     {
         private VisualElement _propertyContainer;
 
         public override string uxmlPath => "Panel/PropertyPanel";
 
+        private SerializedProperty _property;
+
+        private PropertyField _field;
+
         public PropertyPanel() : base()
         {
             _propertyContainer = this.Q("property-container");
+            ActionMachineManager.data.onPropertyChanged += OnPropertyChanged;
+
+            _field = new PropertyField();
+            _field.RegisterValueChangeCallback(OnPropertyChanged);
+            _field.name = "property";
+            _propertyContainer.Add(_field);
         }
 
         public new class UxmlFactory : PanelElement.UxmlFactory<PropertyPanel, UxmlTraits>
@@ -41,18 +51,22 @@ namespace XMLib.AM
             }
         }
 
-        protected override void OnPropertyChanged()
+        protected void OnPropertyChanged()
         {
-            base.OnPropertyChanged();
+            if (ActionMachineManager.data.currentProperty != null)
+            {
+                _field.BindProperty(ActionMachineManager.data.currentProperty);
+            }
+            else
+            {
+                _field.Unbind();
+                _field.Clear();
+            }
+        }
 
-            string propertyName = "property";
-            _propertyContainer.Clear();
-
-            if (property == null) { return; }
-            PropertyField field = new PropertyField();
-            field.name = propertyName;
-            field.BindProperty(property);
-            _propertyContainer.Add(field);
+        private void OnPropertyChanged(SerializedPropertyChangeEvent evt)
+        {
+            ActionMachineManager.data?.onPropertyValueChanged(evt);
         }
     }
 }

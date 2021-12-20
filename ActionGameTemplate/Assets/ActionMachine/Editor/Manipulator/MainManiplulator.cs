@@ -28,43 +28,10 @@ namespace XMLib.AM
 
         protected override void RegisterCallbacksOnTarget()
         {
-            target.RegisterCallback<PackageChanged>(OnActionMachinePackageChanged);
         }
 
         protected override void UnregisterCallbacksFromTarget()
         {
-            target.UnregisterCallback<PackageChanged>(OnActionMachinePackageChanged);
-        }
-
-        private void OnActionMachinePackageChanged(PackageChanged evt)
-        {
-            Debug.Log("ActionMachinePackage 变化");
-
-            bool hasData = evt.newPackage != null;
-
-            mainElement.panelContainer.SetEnabled(hasData);
-            mainElement.panelContainer.visible = hasData;
-
-            if (hasData)
-            {
-                mainElement.Bind(ActionMachineManager.inst.data);
-            }
-
-            mainElement.OnPackageChanged(evt.newPackage);
-
-            var panels = mainElement.Query<BaseElement>();
-            panels.ForEach(t =>
-            {
-                using (var evt2 = DataChanged.GetPooled(t))
-                {
-                    mainElement.SendEvent(evt2);
-                }
-            });
-
-            if (!hasData)
-            {
-                mainElement.Unbind();
-            }
         }
     }
 }

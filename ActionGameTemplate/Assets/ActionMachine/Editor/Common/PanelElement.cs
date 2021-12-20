@@ -28,17 +28,12 @@ namespace XMLib.AM
 
         public PanelElement()
         {
-            var uxml = ResourceUtility.LoadUXML(uxmlPath);
+            var uxml = EditorTool.LoadUXML(uxmlPath);
             uxml.CloneTree(this);
 
             _module = this.Q<ModuleElement>("module");
 
             this.AddManipulator(new PanelManipulator());
-        }
-
-        protected override void OnInit(InitEvent evt)
-        {
-            base.OnInit(evt);
         }
 
         public class UxmlFactory<T, D> : UnityEngine.UIElements.UxmlFactory<T, D>

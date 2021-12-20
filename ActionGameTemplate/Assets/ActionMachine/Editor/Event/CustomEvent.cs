@@ -12,42 +12,4 @@ using UnityEngine.UIElements;
 
 namespace XMLib.AM
 {
-    /// <summary>
-    /// InitEvent
-    /// </summary>
-    public class InitEvent : EventBase<InitEvent>
-    {
-        public MainElement mainElement { get; set; }
-
-        public static InitEvent GetPooled(IEventHandler target, MainElement mainElement)
-        {
-            var evt = GetPooled();
-            evt.target = target;
-            evt.mainElement = mainElement;
-            return evt;
-        }
-    }
-
-    public class PackageChanged : EventBase<PackageChanged>
-    {
-        public ActionMachinePackage newPackage { get; set; }
-
-        public static PackageChanged GetPooled(IEventHandler target, ActionMachinePackage newPackage)
-        {
-            var evt = GetPooled();
-            evt.target = target;
-            evt.newPackage = newPackage;
-            return evt;
-        }
-    }
-
-    public class DataChanged : EventBase<DataChanged>
-    {
-        public static DataChanged GetPooled(IEventHandler target)
-        {
-            var evt = GetPooled();
-            evt.target = target;
-            return evt;
-        }
-    }
 }

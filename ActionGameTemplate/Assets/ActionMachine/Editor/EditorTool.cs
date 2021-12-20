@@ -5,6 +5,7 @@
  * 创建时间: 2021/11/14 21:24:53
  */
 
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,16 +40,75 @@ namespace XMLib.AM
     /// </summary>
     public static class EditorTool
     {
+        [MenuItem("XMLib/Action Machine")]
+        private static void ShowActionMachine()
+        {
+            ActionMachineWindow win = EditorWindow.GetWindow<ActionMachineWindow>();
+            win.Show();
+        }
+
+        [MenuItem("XMLib/ActionMachine/创建ActionMachine配置文件")]
+        public static void CreateFileMenu()
+        {
+            CreateFile();
+        }
+
+        public static VisualTreeAsset LoadUXML(string name)
+        {
+            string path = string.Format("UXML/{0}", name);
+            return Resources.Load<VisualTreeAsset>(path);
+        }
+
+        public static StyleSheet LoadUSS(string name)
+        {
+            string path = string.Format("USS/{0}", name);
+            return Resources.Load<StyleSheet>(path);
+        }
+
+        private static JsonSerializerSettings _jsonSettings = new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        };
+
+        public static ActionMachineData ReadData(TextAsset textAsset)
+        {
+            return JsonConvert.DeserializeObject<ActionMachineData>(textAsset.text, _jsonSettings);
+        }
+
+        public static void WriteData(ActionMachineData data, TextAsset textAsset)
+        {
+            string jsonData = JsonConvert.SerializeObject(data, _jsonSettings);
+            File.WriteAllText(AssetDatabase.GetAssetPath(textAsset), jsonData);
+            EditorUtility.SetDirty(textAsset);
+            AssetDatabase.Refresh();
+        }
+
+        public static string CreateFile()
+        {
+            string filePath = EditorTool.CreateValidFilePathFromSelectDirectory("ActionMachine.json");
+            string jsonData = JsonConvert.SerializeObject(ActionMachineData.Default, _jsonSettings);
+            File.WriteAllText(filePath, jsonData);
+            AssetDatabase.Refresh();
+            return filePath;
+        }
+
+        public static StateData CreateStateData()
+        {
+            var state = new StateData()
+            {
+                setting = new StateSettingData()
+                {
+                    stateName = $"State({UnityEngine.Random.Range(0, 100)})"
+                }
+            };
+
+            return state;
+        }
+
         public static void ApplyWireMaterial()
         {
             var method = typeof(HandleUtility).GetMethod("ApplyWireMaterial", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static, null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
             method.Invoke(null, new object[] { });
-        }
-
-        public static void IncrementVersion(this VisualElement ve, VersionChangeType changeType)
-        {
-            var method = typeof(VisualElement).GetMethod("IncrementVersion", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            method.Invoke(ve, new object[] { (int)changeType });
         }
 
         public static float RoundToPixelGrid(float v)

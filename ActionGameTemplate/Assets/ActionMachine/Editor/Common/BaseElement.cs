@@ -18,22 +18,5 @@ namespace XMLib.AM
     /// </summary>
     public abstract class BaseElement : VisualElement
     {
-        public MainElement main { get; private set; }
-
-        public BaseElement()
-        {
-            this.RegisterCallback<InitEvent>(OnInit);
-            this.RegisterCallback<DataChanged>(OnDataChanged);
-        }
-
-        protected virtual void OnDataChanged(DataChanged evt)
-        {
-            Debug.Log($"{GetType().Name} => OnDataChanged");
-        }
-
-        protected virtual void OnInit(InitEvent evt)
-        {
-            main = evt.mainElement;
-        }
     }
 }

@@ -18,13 +18,14 @@ MonoBehaviour:
     states:
     - id: 0
     - id: 1
+    - id: 2
   references:
     version: 1
     00000000:
       type: {class: StateData, ns: XMLib.AM, asm: XMLib.ActionMachine}
       data:
         setting:
-          stateName: State(65)
+          stateName: dasdasd
           animName: 
           stateLoopCnt: 0
           nextStateName: 
@@ -40,6 +41,15 @@ MonoBehaviour:
         - name: 2222
         - name: 11111
     00000001:
+      type: {class: StateData, ns: XMLib.AM, asm: XMLib.ActionMachine}
+      data:
+        setting:
+          stateName: "\u81ED\u5C0F\u5B50\u81ED\u5C0F\u5B50"
+          animName: 
+          stateLoopCnt: 0
+          nextStateName: 
+        tracks: []
+    00000002:
       type: {class: StateData, ns: XMLib.AM, asm: XMLib.ActionMachine}
       data:
         setting:

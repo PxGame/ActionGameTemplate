@@ -20,8 +20,6 @@ namespace XMLib.AM
     /// </summary>
     public class ActionMachineWindow : EditorWindow
     {
-        public MainElement main { get; protected set; }
-
         private void Awake()
         {
             ActionMachineManager.Reset();
@@ -33,9 +31,7 @@ namespace XMLib.AM
 
         protected void CreateGUI()
         {
-            main = new MainElement();
-            rootVisualElement.Add(main);
-            main.Initialize();
+            ActionMachineManager.Initialize(rootVisualElement);
         }
 
         private void OnDisable()

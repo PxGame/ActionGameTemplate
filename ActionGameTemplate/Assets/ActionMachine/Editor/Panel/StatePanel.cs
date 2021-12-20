@@ -12,6 +12,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEditor;
 using System.Linq;
+using System;
 
 namespace XMLib.AM
 {
@@ -34,6 +35,10 @@ namespace XMLib.AM
                 text.style.unityTextAlign = TextAnchor.MiddleLeft;
                 return text;
             };
+            statesList.unbindItem = (ve, index) =>
+            {
+                ve.RemoveFromHierarchy();
+            };
             statesList.bindItem = (ve, index) =>
             {
                 var state = statesList.itemsSource[index] as SerializedProperty;
@@ -45,12 +50,12 @@ namespace XMLib.AM
                 {
                     evt.menu.AppendAction("删除", (x) =>
                     {
-                        ActionMachineManager.inst.RecordSource();
-                        ActionMachineManager.inst.source.data.states.RemoveAt(index);
+                        ActionMachineManager.data.RecordSource();
+                        ActionMachineManager.data.RemoveStateAt(index);
                     });
                     evt.menu.AppendAction("插入状态", (x) =>
                     {
-                        ActionMachineManager.inst.source.data.states.Insert(index, ActionMachineManager.inst.CreateStateData());
+                        ActionMachineManager.data.InsertNewState(index);
                     });
                 }));
             };
@@ -58,28 +63,32 @@ namespace XMLib.AM
             {
                 if (t.Count() == 0) { return; }
                 var state = t.First() as SerializedProperty;
-                main.property.Inspect(state.FindPropertyRelative("setting"));
-                main.timeline.Inspect(state.FindPropertyRelative("tracks"));
+
+                ActionMachineManager.data.InspectState(state);
             };
             statesList.AddManipulator(new ContextualMenuManipulator((evt) =>
             {
                 evt.menu.AppendAction("添加状态", (x) =>
                 {
-                    ActionMachineManager.inst.source.data.states.Add(ActionMachineManager.inst.CreateStateData());
+                    ActionMachineManager.data.AddNewState();
                 });
             }));
+
+            ActionMachineManager.data.onPackageChanged += OnPackageChanged;
         }
 
-        protected override void OnInit(InitEvent evt)
+        private void OnPackageChanged()
         {
-            base.OnInit(evt);
-
-            statesList.Unbind();
-        }
-
-        protected override void OnDataChanged(DataChanged evt)
-        {
-            base.OnDataChanged(evt);
+            if (ActionMachineManager.data.serializedObject != null)
+            {
+                var states = ActionMachineManager.data.serializedObject.FindProperty("data.states");
+                statesList.BindProperty(states);
+            }
+            else
+            {
+                statesList.ClearSelection();
+                statesList.Unbind();
+            }
         }
 
         #region Design

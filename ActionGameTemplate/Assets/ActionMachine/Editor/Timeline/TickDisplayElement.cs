@@ -49,14 +49,6 @@ namespace XMLib.AM
             }
         }
 
-        private void OnGenerateVisualContent(MeshGenerationContext mgc)
-        {
-        }
-
-        private void ss(MeshGenerationContext c)
-        {
-        }
-
         protected override void ImmediateRepaint()
         {
             EditorTool.ApplyWireMaterial();
@@ -68,7 +60,7 @@ namespace XMLib.AM
                 count %= 10;
 
                 GL.Vertex(new Vector2(i, layout.yMax));
-                GL.Vertex(new Vector2(i, layout.yMax - (count == 0 ? 10 : 4)));
+                GL.Vertex(new Vector2(i, layout.yMax - (count == 0 ? 14 : (count == 5 ? 10 : 6))));
 
                 count++;
             }

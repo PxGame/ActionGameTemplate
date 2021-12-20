@@ -28,10 +28,10 @@ namespace XMLib.AM
 
         public ModuleElement()
         {
-            var uxml = ResourceUtility.LoadUXML("Panel/ModuleElement");
+            var uxml = EditorTool.LoadUXML("Panel/ModuleElement");
             uxml.CloneTree(this);
 
-            var uss = ResourceUtility.LoadUSS("Panel/ModuleElement");
+            var uss = EditorTool.LoadUSS("Panel/ModuleElement");
             this.styleSheets.Add(uss);
 
             _body = this.Q("body");

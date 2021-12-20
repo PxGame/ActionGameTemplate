@@ -1,15 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement style="flex-grow: 1; background-color: rgb(200, 112, 112); flex-direction: row; overflow: hidden; display: flex;">
-        <ui:VisualElement style="width: 177px; background-color: rgb(255, 131, 131); flex-shrink: 0;">
-            <ui:VisualElement name="toolbar-top-container" style="flex-shrink: 0; background-color: rgb(146, 229, 72); height: 50px;" />
-            <ui:VisualElement name="track-header-container" style="flex-grow: 1; background-color: rgb(231, 201, 151); overflow: hidden; visibility: visible;">
-                <ui:VisualElement name="track-header-content" style="background-color: rgb(213, 203, 255); height: 237px; width: auto; flex-shrink: 0;" />
+    <ui:VisualElement style="flex-grow: 1; background-color: rgb(200, 112, 112); flex-direction: row; overflow: visible; display: flex;">
+        <ui:VisualElement style="width: 177px; background-color: rgb(255, 131, 131); flex-shrink: 0; overflow: visible;">
+            <ui:VisualElement name="toolbar-top-container" style="flex-shrink: 0; background-color: rgb(146, 229, 72); height: 50px; overflow: hidden;" />
+            <ui:VisualElement name="track-header-container" style="flex-grow: 1; background-color: rgb(231, 201, 151); overflow: hidden;">
+                <ui:VisualElement name="track-header-content" style="background-color: rgb(213, 203, 255); height: 237px; width: auto; flex-shrink: 0; display: flex; visibility: visible; overflow: visible;" />
             </ui:VisualElement>
-            <ui:VisualElement name="toolbar-bottom-container" style="flex-shrink: 0; height: 13px; background-color: rgb(242, 255, 117);" />
+            <ui:VisualElement name="toolbar-bottom-container" style="flex-shrink: 0; height: 13px; background-color: rgb(242, 255, 117); overflow: hidden;" />
         </ui:VisualElement>
         <ui:VisualElement style="width: auto; flex-grow: 1; background-color: rgb(255, 158, 158); flex-direction: row;">
             <ui:VisualElement style="flex-grow: 1;">
-                <ui:VisualElement style="height: auto; width: auto; flex-grow: 1; padding-right: 0; margin-right: 0; background-color: rgb(166, 210, 243); padding-bottom: 0; padding-left: 0; padding-top: 0; margin-bottom: 0;">
+                <ui:VisualElement style="height: auto; width: auto; flex-grow: 1; padding-right: 0; margin-right: 0; background-color: rgb(166, 210, 243); padding-bottom: 0; padding-left: 0; padding-top: 0; margin-bottom: 0; overflow: visible;">
                     <ui:VisualElement name="tick-container" style="height: 50px; background-color: rgb(229, 229, 229); overflow: hidden; flex-shrink: 0;">
                         <XMLib.AM.TickDisplayElement style="flex-grow: 1;" />
                     </ui:VisualElement>

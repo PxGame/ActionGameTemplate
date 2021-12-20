@@ -20,7 +20,7 @@ namespace XMLib.AM
     /// </summary>
     public class Timeline : VisualElement
     {
-        private SerializedProperty _property;
+        private SerializedProperty _stateProperty => ActionMachineManager.data.currentState;
 
         private List<TrackItem> _trackItems = new List<TrackItem>();
 
@@ -28,6 +28,7 @@ namespace XMLib.AM
         private VisualElement _trackHeaderContainer;
         private VisualElement _trackHeaderContent;
         private VisualElement _toolbarBottomContainer;
+
         private VisualElement _tickContainer;
         private VisualElement _trackBodyContainer;
         private VisualElement _trackBodyContent;
@@ -48,7 +49,7 @@ namespace XMLib.AM
 
         public Timeline()
         {
-            var uxml = ResourceUtility.LoadUXML("Timeline/Timeline");
+            var uxml = EditorTool.LoadUXML("Timeline/Timeline");
             uxml.CloneTree(this);
 
             _toolbarTopContainer = this.Q<VisualElement>("toolbar-top-container");
@@ -68,6 +69,7 @@ namespace XMLib.AM
             _trackBodyContainer.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 
             this.RegisterCallback<WheelEvent>(OnScrollWheel);
+            ActionMachineManager.data.onStateChanged += OnStateChanged;
 
             _verticalScroller.valueChanged += (y) => UpdateContentTransform();
             _horizontalScroller.valueChanged += (x) => UpdateContentTransform();
@@ -106,19 +108,8 @@ namespace XMLib.AM
             UpdateContentTransform();
         }
 
-        /// <summary>
-        /// 指向的值必须为 TrackData 的集合
-        /// </summary>
-        /// <param name="property"></param>
-        public void Inspect(SerializedProperty property)
+        public void OnStateChanged()
         {
-            if (property != null && (!property.isArray || !string.Equals(property.arrayElementType, nameof(TrackData))))
-            {
-                throw new Exception("传入的 property 必须为 TrackData 的数组");
-            }
-
-            _property = property;
-
             Refresh();
         }
 
@@ -128,8 +119,6 @@ namespace XMLib.AM
             UpdateContentRect();
             UpdateScroller();
             UpdateContentTransform();
-
-            this.IncrementVersion(VersionChangeType.Repaint);
         }
 
         private void UpdateTracks()
@@ -140,11 +129,12 @@ namespace XMLib.AM
                 _trackBodyContent.Remove(item.body);
             }
             _trackItems.Clear();
-            if (_property != null)
+            if (_stateProperty != null)
             {
-                for (int i = 0; i < _property.arraySize; i++)
+                var trackInfos = _stateProperty.FindPropertyRelative("tracks");
+                for (int i = 0; i < trackInfos.arraySize; i++)
                 {
-                    var track = _property.GetArrayElementAtIndex(i);
+                    var track = trackInfos.GetArrayElementAtIndex(i);
                     AppendTrack(track);
                 }
             }
@@ -172,9 +162,6 @@ namespace XMLib.AM
             _trackHeaderContent.style.height = height;
             _trackBodyContent.style.height = height;
             _trackBodyContent.style.width = width;
-
-            _trackHeaderContent.IncrementVersion(VersionChangeType.Repaint);
-            _trackBodyContent.IncrementVersion(VersionChangeType.Repaint);
         }
 
         private void UpdateScroller()
@@ -195,9 +182,6 @@ namespace XMLib.AM
 
             _horizontalScroller.value = Mathf.Clamp(_horizontalScroller.value, _horizontalScroller.lowValue, _horizontalScroller.highValue);
             _verticalScroller.value = Mathf.Clamp(_verticalScroller.value, _verticalScroller.lowValue, _verticalScroller.highValue);
-
-            _verticalScroller.IncrementVersion(VersionChangeType.Repaint);
-            _horizontalScroller.IncrementVersion(VersionChangeType.Repaint);
         }
 
         private TrackItem AppendTrack(SerializedProperty trackProperty)
